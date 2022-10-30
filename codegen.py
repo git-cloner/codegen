@@ -1,12 +1,17 @@
 import asyncio
 import json
 import time
+import os
 import aiohttp_cors
 from aiohttp import web
 from jaxformer.hf.sample import load_model,sampling
 
+ROOT = os.path.dirname(__file__)
+
 async def index(request):
-    content = '<h1>code gen</h1>'
+    content = open(os.path.join(ROOT, "index.html"),
+                   "r", encoding='utf-8').read()
+    print("index for " +  request.remote)
     return web.Response(content_type="text/html", text=content)
 
 async def codegen(request):
@@ -26,6 +31,7 @@ async def codegen(request):
 app = web.Application()
 cors = aiohttp_cors.setup(app)
 app.router.add_get("/", index)
+app.router.add_get("/codegen", index)
 app.router.add_post("/codegen", codegen)
 
 for route in list(app.router.routes()):

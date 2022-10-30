@@ -209,6 +209,8 @@ def load_model():
     # (3) load
     with print_time('loading parameters'):
         model = create_model(ckpt=ckpt, fp16=use_fp16).to(device)
+        if torch.cuda.device_count() > 1:
+            model = torch.nn.DataParallel(model, device_ids=[0, 1])
 
     with print_time('loading tokenizer'):
         if model_name in models_pl:
@@ -217,7 +219,10 @@ def load_model():
             tokenizer = create_tokenizer()
         tokenizer.padding_side = 'left'
         tokenizer.pad_token = g_pad_token_id
-    g_model = model
+    if torch.cuda.device_count() > 1:
+        g_model = model.module
+    else:
+        g_model = model
     g_device = device
     g_tokenizer = tokenizer
     g_batch_size = 1
