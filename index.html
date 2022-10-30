@@ -9,125 +9,143 @@
 <script src="https://cdn.bootcdn.net/ajax/libs/codemirror/5.62.2/mode/python/python.min.js"></script>
 <script src="https://cdn.bootcdn.net/ajax/libs/codemirror/5.62.2/mode/go/go.min.js"></script>
 <style type="text/css">
-.CodeMirror{border:1px solid black;font- size:15px;width:1000px;height:400px;margin: 5px;}
-.container {
-    max-width: 1400px;
-    min-width: 1000px;
-    margin: 2 auto;
-    padding-left: 0;
-    padding-right: 0;
-}
+	.CodeMirror {
+		border: 1px solid black;
+		font- size: 18px;
+		width: 750px;
+		height: 400px;
+		margin: 1px;
+	}
+
+	.container {
+		max-width: 800px;
+		min-width: 1000px;
+		margin: 2 auto;
+		padding-left: 0;
+		padding-right: 0;
+	}
 
 
-ul li{
-	padding: 10px 20px;
-	display: inline-block;
-	background:#ddd;
-	border-radius: 3px;
-	white-space:nowrap;
-}
+	ul li {
+		padding: 10px 20px;
+		display: inline-block;
+		background: #ddd;
+		border-radius: 3px;
+		white-space: nowrap;
+		margin: 1px;
+	}
 
-a {
-    color: blue;
-}
+	a {
+		color: blue;
+		font-size: 20px;
+	}
 
-.nav {
-    padding-left: 10px;
-    margin-bottom: 0;
-    list-style: none;
-    position: relative;
-    display:inline;
-	white-space: nowrap;
-}
+	.nav {
+		padding-left: 2px;
+		margin-bottom: 0;
+		list-style: none;
+		position: relative;
+		display: inline;
+		white-space: nowrap;
+	}
 </style>
+
 <head>
-<title>CodeGen</title>
+	<title>AI CodeGen</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
 </head>
+
 <body>
 	<div class="container">
 		<h3>基于Salesforce codegen的AI代码生成</h3>
 		<ul class="nav">
-			<li><a href="javascript:onModeChange('cpp');">c++</a></li>
+			<li><a href="javascript:onModeChange('cpp');">c  c++  c#</a></li>
 			<li><a href="javascript:onModeChange('python');">python</a></li>
-			<li><a href="javascript:onModeChange('java');">java</a></li>
+			<li><a href="javascript:onModeChange('java');">Java</a></li>
+		</ul>
+		<br>
+		<ul class="nav">
 			<li><a href="javascript:onModeChange('javascript');">javascript</a></li>
 			<li><a href="javascript:onModeChange('golang');">golang</a></li>
-			<li><a href="javascript:onGenCode1();">Ctrl + Enter生成代码</a></li>
-			<li><div id="hint"></div></li>
+			<li><a href="javascript:onGenCode1();">Ctrl+Enter生成</a></li>
 		</ul>
 		<textarea id="code"></textarea>
+		<div id="hint"></div>
 		源码:
 		<a href="https://github.com/git-cloner/codegen" target="_blank">https://github.com/git-cloner/codegen</a>
 	</div>
 </body>
 <script type="text/javascript">
-	var editor = CodeMirror.fromTextArea(document.getElementById("code"),{
-                mode: "text/x-c" , 
-                lineNumbers:true,
-                theme:"eclipse",
-                extraKeys:{
-                	"Ctrl-Enter": function (cm) {
-                		onGenCode(cm.getValue()) ;
-                	}
-                }
-            });
+	var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+		mode: "text/x-c",
+		lineNumbers: true,
+		theme: "eclipse",
+		extraKeys: {
+			"Ctrl-Enter": function (cm) {
+				onGenCode(cm.getValue());
+			}
+		}
+	});
+	onModeChange('cpp') ;
+	setTimeout("onGenCode1()",500) ;
 
-	function onGenCode1(){
-		context = editor.getValue() ;
-		onGenCode(context) ;
+	function onGenCode1() {
+		context = editor.getValue();
+		onGenCode(context);
 	}
 
-	function onModeChange(modename){
-		modestr = "" ;
-		if(modename=="cpp"){
-			modestr = "text/x-c" ;
-			editor.setValue("int add(int x,int y){") ;
-		}else if (modename=="python"){
-			modestr = "text/x-python" ;
-			editor.setValue("def hello_world():") ;
-		}else if (modename=="java"){
-			modestr = "text/x-java" ;
-			editor.setValue("int add(int x,int y){") ;
-		}else if (modename=="javascript"){
-			modestr = "javascript" ;
-			editor.setValue("function Add(x,y){") ;
-		}else if (modename=="golang"){
-			modestr = "text/x-go" ;
-			editor.setValue("func IsBlacklist(bl []string,url string) bool{") ;
+	function onModeChange(modename) {
+		modestr = "";
+		if (modename == "cpp") {
+			modestr = "text/x-c";
+			editor.setValue("int add(int x,int y){");
+		} else if (modename == "python") {
+			modestr = "text/x-python";
+			editor.setValue("def hello_world():");
+		} else if (modename == "java") {
+			modestr = "text/x-java";
+			editor.setValue("int add(int x,int y){");
+		} else if (modename == "javascript") {
+			modestr = "javascript";
+			editor.setValue("function Add(x,y,z){");
+		} else if (modename == "golang") {
+			modestr = "text/x-go";
+			editor.setValue("func IsBlacklist(bl []string,url string) bool{");
 		}
-		editor.setOption("mode",modestr)
+		editor.setOption("mode", modestr)
 		editor.focus();
 		editor.setCursor(editor.lineCount(), 0);
 	}
 
-	function onGenCode(context){
-		sl = context.trim().split("\n") ;
-		context = sl[sl.length -1] ;
-		if(context.trim() == ""){
+	function onGenCode(context) {
+		sl = context.trim().split("\n");
+		context = sl[sl.length - 1];
+		if (context.trim() == "") {
 			alert("输入不能为空！")
-			return ;
+			return;
 		}
-		document.getElementById("hint").innerText = "正在生成代码" ;
+		document.getElementById("hint").innerText = "正在生成代码";
 		let xhr = new XMLHttpRequest();
-        xhr.open('post','https://gitclone.com/aiit/codegen');
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.onload = function(){
-        	json = JSON.parse(xhr.response) ;
-        	console.log(json) ;
-        	context = context + '\n' + json.result ;
-        	var index=0;
-        	function type(){
-			    editor.setValue(context.substring(0,index++));
-			    if(index >= context.length){
-			    	clearInterval(timer) ;
-			    }
+		xhr.open('post', 'https://gitclone.com/aiit/codegen');
+		xhr.setRequestHeader('Content-Type', 'application/json');
+		xhr.onload = function () {
+			json = JSON.parse(xhr.response);
+			console.log(json);
+			context = context + '\n' + json.result;
+			var index = 0;
+			function type() {
+				editor.setValue(context.substring(0, index++));
+				if (index >= context.length) {
+					clearInterval(timer);
+				}
 			}
-			var timer = setInterval(type, 20);
+			var timer = setInterval(type, 10);
 
-        	document.getElementById("hint").innerText = "用时：" + json.time.toFixed(2)  + '秒';
-        }
-        xhr.send('{"context":"' + context + '","maxlength":64}');
+			document.getElementById("hint").innerText = "用时：" + json.time.toFixed(2) + '秒';
+		}
+		xhr.send('{"context":"' + context + '","maxlength":64}');
 	}
-    
+
 </script>
+
 </html>
