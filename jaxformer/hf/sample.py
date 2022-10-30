@@ -8,6 +8,7 @@ import re
 import time
 import random
 import argparse
+from functools import lru_cache
 
 import torch
 
@@ -229,6 +230,7 @@ def load_model():
     g_temp = 0.2
     g_top_p = 0.95
     
+@lru_cache(maxsize=1024, typed=False)
 def sampling(input_context,max_length):
     with print_time('sampling'):
         completion = sample(
