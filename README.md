@@ -6,6 +6,12 @@ Fork from https://github.com/salesforce/CodeGen
 
 Add web server support 
 
+# demo
+
+https://gitclone.com/aiit/codegen
+
+# use
+
 ## Clone code
 
 git clone https://gitclone.com/github.com/git-cloner/codegen
