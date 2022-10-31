@@ -11,7 +11,7 @@ ROOT = os.path.dirname(__file__)
 async def index(request):
     content = open(os.path.join(ROOT, "index.html"),
                    "r", encoding='utf-8').read()
-    print("index for " +  request.remote)
+    print(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime()),"index : " + request.remote)
     return web.Response(content_type="text/html", text=content)
 
 async def codegen(request):
@@ -19,8 +19,11 @@ async def codegen(request):
     context = params["context"]
     maxlength = params["maxlength"]
     start = time.perf_counter()
+    print(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime()),"context : " + context)
+    context = context.replace("//","").replace("#","").strip()
     result = sampling(context,maxlength)
     end = time.perf_counter()
+    print(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime()),"result  : " + result)
     return web.Response(
         content_type="application/json",
         text=json.dumps(
