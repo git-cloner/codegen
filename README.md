@@ -14,10 +14,9 @@ https://gitclone.com/aiit/codegen
 
 https://github.com/git-cloner/codegeeker
 
-<figure class="half">
-    <img src="https://gitclone.com/download1/aiit/codegen.gif">
-    <img src="https://gitclone.com/download1/aiit/codegeeker.gif">
-</figure>
+ ![](https://gitclone.com/download1/aiit/codegeeker.gif)
+
+ ![](https://gitclone.com/download1/aiit/codegen.gif)
 
 ## usage
 
