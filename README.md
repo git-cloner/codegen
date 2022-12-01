@@ -10,7 +10,12 @@ Add web server support
 
 https://gitclone.com/aiit/codegen
 
-# use
+<figure class="half">
+    <img src="https://gitclone.com/download1/aiit/codegen.gif">
+    <img src="https://gitclone.com/download1/aiit/codegeeker.gif">
+</figure>
+
+# usage
 
 ## Clone code
 
