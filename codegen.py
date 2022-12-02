@@ -18,6 +18,10 @@ async def codegen(request):
     params = await request.json()
     context = params["context"]
     maxlength = params["maxlength"]
+    #support chs
+    f = lambda x='ddd':sum([1 if u'\u4e00' <= i <= u'\u9fff' else 0 for i in x])>0
+    if (f(context) and context.strip().endswith(":")):
+        context = context.strip()[0:-1]
     start = time.perf_counter()
     print(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime()),"context : " + context)
     context = context.replace("//","").replace("#","").strip()
