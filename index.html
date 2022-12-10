@@ -70,16 +70,17 @@
 
 <body>
 	<div class="container">
-		<h3>基于Salesforce codegen的AI代码生成</h3>
+		<h3>基于Salesforce codegen和openai chatGPT的AI代码生成</h3>
 		<ul class="nav">
 			<li><a href="javascript:onModeChange('cpp');">c  c++  c#</a></li>
 			<li><a href="javascript:onModeChange('python');">python</a></li>
 			<li><a href="javascript:onModeChange('java');">Java</a></li>
+			<li><a href="javascript:onModeChange('javascript');">javascript</a></li>
 		</ul>
 		<br>
 		<ul class="nav">
-			<li><a href="javascript:onModeChange('javascript');">javascript</a></li>
 			<li><a href="javascript:onModeChange('golang');">golang</a></li>
+			<li><a href="javascript:onModeChange('chatgpt');">chatGPT</a></li>
 			<li><a href="javascript:onGenCode1();">Ctrl+Enter生成</a></li>
 		</ul>
 		<textarea id="code"></textarea>
@@ -132,6 +133,9 @@
 		} else if (modename == "golang") {
 			modestr = "text/x-go";
 			editor.setValue("func IsBlacklist(bl []string,url string) bool{");
+		} else{
+			modestr = "python";
+			editor.setValue("写一个python版的数组排序");
 		}
 		editor.setOption("mode", modestr)
 		editor.focus();
