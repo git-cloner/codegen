@@ -6,6 +6,8 @@ Fork from https://github.com/salesforce/CodeGen
 
 Add web server support 
 
+Support ChatGPT Now
+
 ## Online demo
 
 https://gitclone.com/aiit/codegen
@@ -58,6 +60,9 @@ python codegen.py
 
 ### test
 post: http://127.0.0.1:5000/codegen or direct post to :https://gitclone.com/aiit/codegen
+
+#### Use Salesforce codegen
+
 input params: {"context":"def hello_world():","maxlength":128}
 
 ! note: maxlength is an integral multiple of 32
@@ -67,3 +72,7 @@ return params:
     "result": "\n        print(\"Hello world\")\n        hello_world()\n      ",
     "time": 1.9620850095525384
 }
+
+#### Use ChatGPT
+
+input params: {"context":"写一个python版的数组排序","maxlength":128}

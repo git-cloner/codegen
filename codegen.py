@@ -3,6 +3,8 @@ import json
 import time
 import os
 import aiohttp_cors
+import requests
+from functools import lru_cache
 from aiohttp import web
 from jaxformer.hf.sample import load_model,sampling
 
@@ -14,18 +16,32 @@ async def index(request):
     print(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime()),"index : " + request.remote)
     return web.Response(content_type="text/html", text=content)
 
+@lru_cache(maxsize=1024, typed=False)
+def getAnswerFromChatGPT(context):
+    url = 'http://chatgptserver.com:5000/chat'
+    data = '{"message":"' +  context + '", "user": "gitclone"}'
+    headers = {'content-type': 'application/json;charset=utf-8'}
+    r = requests.post(url,data= data.encode(), headers=headers)
+    res = r.json()
+    return res['response']
+
 async def codegen(request):
     params = await request.json()
     context = params["context"]
     maxlength = params["maxlength"]
     #support chs
+    flag_chs = False
     f = lambda x='ddd':sum([1 if u'\u4e00' <= i <= u'\u9fff' else 0 for i in x])>0
-    if (f(context) and context.strip().endswith(":")):
+    flag_chs = f(context)
+    if ( flag_chs and context.strip().endswith(":")):
         context = context.strip()[0:-1]
     start = time.perf_counter()
     print(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime()),"context : " + context)
     context = context.replace("//","").replace("#","").strip()
-    result = sampling(context,maxlength)
+    if flag_chs :
+        result = getAnswerFromChatGPT(context)
+    else:
+        result = sampling(context,maxlength)
     end = time.perf_counter()
     print(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime()),"result  : " + result)
     return web.Response(
