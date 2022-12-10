@@ -35,6 +35,11 @@ async def codegen(request):
     flag_chs = f(context)
     if ( flag_chs and context.strip().endswith(":")):
         context = context.strip()[0:-1]
+    #support !
+    if not flag_chs:
+        flag_chs = context.strip().endswith("!")
+        if flag_chs:
+           context = context.strip()[0:-1] 
     start = time.perf_counter()
     print(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime()),"context : " + context)
     context = context.replace("//","").replace("#","").strip()
