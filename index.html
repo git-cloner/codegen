@@ -18,10 +18,20 @@
 
 	.CodeMirror {
 		border: 1px solid black;
-		font- size: 18px;
+		font-size: 16px;
 		width: 750px;
 		height: 400px;
 		margin: 1px;
+	}
+
+	@media screen and (min-width:1024px){
+		.CodeMirror {
+			border: 1px solid black;
+			font-size: 16px;
+			width: 960px;
+			height: 500px;
+			margin: 1px;
+		}
 	}
 
 	.container {
@@ -108,7 +118,7 @@
 			}
 		}
 	});
-	onModeChange('cpp') ;
+	onModeChange('chatgpt') ;
 	setTimeout("onGenCode1()",500) ;
 
 	function onGenCode1() {
