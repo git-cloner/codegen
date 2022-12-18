@@ -80,7 +80,7 @@
 
 <body>
 	<div class="container">
-		<h3>基于Salesforce codegen和openai chatGPT的AI代码生成</h3>
+		<h3>基于Salesforce codegen和GPTJ的AI代码生成</h3>
 		<ul class="nav">
 			<li><a href="javascript:onModeChange('cpp');">c  c++  c#</a></li>
 			<li><a href="javascript:onModeChange('python');">python</a></li>
@@ -90,7 +90,7 @@
 		<br>
 		<ul class="nav">
 			<li><a href="javascript:onModeChange('golang');">golang</a></li>
-			<li><a href="javascript:onModeChange('chatgpt');">chatGPT</a></li>
+			<!--<li><a href="javascript:onModeChange('chatgpt');">chatGPT(比较慢)</a></li>-->
 			<li><a href="javascript:onGenCode1();">Ctrl+Enter生成</a></li>
 		</ul>
 		<textarea id="code"></textarea>
@@ -118,7 +118,7 @@
 			}
 		}
 	});
-	onModeChange('chatgpt') ;
+	onModeChange('cpp') ;
 	setTimeout("onGenCode1()",500) ;
 
 	function onGenCode1() {
