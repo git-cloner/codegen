@@ -80,7 +80,7 @@
 
 <body>
 	<div class="container">
-		<h3>基于Salesforce codegen和GPTJ的AI代码生成</h3>
+		<h3>基于Salesforce codegen和GPTJ、GPT-neo的AI代码生成</h3>
 		<ul class="nav">
 			<li><a href="javascript:onModeChange('cpp');">c  c++  c#</a></li>
 			<li><a href="javascript:onModeChange('python');">python</a></li>
@@ -90,7 +90,7 @@
 		<br>
 		<ul class="nav">
 			<li><a href="javascript:onModeChange('golang');">golang</a></li>
-			<!--<li><a href="javascript:onModeChange('chatgpt');">chatGPT(比较慢)</a></li>-->
+			<li><a href="javascript:onModeChange('chatgpt');">GPT-neo(比较慢)</a></li>
 			<li><a href="javascript:onGenCode1();">Ctrl+Enter生成</a></li>
 		</ul>
 		<textarea id="code"></textarea>
@@ -112,6 +112,7 @@
 		mode: "text/x-c",
 		lineNumbers: true,
 		theme: "eclipse",
+		lineWrapping:true,
 		extraKeys: {
 			"Ctrl-Enter": function (cm) {
 				onGenCode(cm.getValue());
@@ -119,7 +120,7 @@
 		}
 	});
 	onModeChange('cpp') ;
-	setTimeout("onGenCode1()",500) ;
+	
 
 	function onGenCode1() {
 		context = editor.getValue();
@@ -150,6 +151,7 @@
 		editor.setOption("mode", modestr)
 		editor.focus();
 		editor.setCursor(editor.lineCount(), 0);
+		setTimeout("onGenCode1()",500) ;
 	}
 
 	function onGenCode(context) {

@@ -38,10 +38,17 @@ git clone https://gitclone.com/github.com/git-cloner/codegen
 conda create -n codegen python=3.8
 conda activate codegen
 pip install pillow
-pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 -f https://download.pytorch.org/whl/torch_stable.html
-pip install transformers==4.16.2
+pip install torch torchvision torchaudio
+pip install transformers==4.25.1
+pip install accelerate
 pip install aiohttp==3.8.3
 pip install aiohttp_cors==0.7.0
+#pip install huggingface for gpt-neo
+pip install datasets
+pip install gradio
+pip install sentencepiece==0.1.91
+# if speed is slow ,can use cache -i http://pypi.douban.com/simple --trusted-host=pypi.douban.com
+
 ```
 
 ### Download model

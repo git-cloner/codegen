@@ -7,6 +7,7 @@ import requests
 from functools import lru_cache
 from aiohttp import web
 from jaxformer.hf.sample import load_model,sampling
+from gpt_neo import gpt_load_model,gpt_generate
 
 ROOT = os.path.dirname(__file__)
 
@@ -27,13 +28,14 @@ def getAnswerFromChatGPT(context):
 
 @lru_cache(maxsize=1024, typed=False)
 def getAnswerFromChatGPTJ(context):
-    url = 'http://52.82.67.116:8081/generate/'
-    data = '{' + '"text": "' + context + '",' + '"generate_tokens_limit": 40,'+ '"top_p": 0.7,'+'"top_k": 0,' + '"temperature":1.0' +'}' ;
-    headers = {'content-type': 'application/json;charset=utf-8'}
-    r = requests.post(url,data= data.encode(), headers=headers)
-    res = r.json()
-    return res['completion']
-
+    #url = 'http://52.82.67.116:8081/generate/'
+    #data = '{' + '"text": "' + context + '",' + '"generate_tokens_limit": 40,'+ '"top_p": 0.7,'+'"top_k": 0,' + '"temperature":1.0' +'}' ;
+    #headers = {'content-type': 'application/json;charset=utf-8'}
+    #r = requests.post(url,data= data.encode(), headers=headers)
+    #res = r.json()
+    #return res['completion']
+    gpt_load_model()
+    return gpt_generate(context,128)
 
 async def codegen(request):
     params = await request.json()
@@ -53,7 +55,7 @@ async def codegen(request):
     start = time.perf_counter()
     print(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime()),"context : " + context)
     context = context.replace("//","").replace("#","").strip()
-    if flag_chs :
+    if flag_chs :#or content.startwith('gpt-j') :
         result = getAnswerFromChatGPTJ(context).replace(context,"")
     else:
         result = sampling(context,maxlength)
