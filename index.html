@@ -9,11 +9,11 @@
 <script src="https://cdn.bootcdn.net/ajax/libs/codemirror/5.62.2/mode/python/python.min.js"></script>
 <script src="https://cdn.bootcdn.net/ajax/libs/codemirror/5.62.2/mode/go/go.min.js"></script>
 <style type="text/css">
-	@media screen and (min-width:960px){
-		body{
-			display:flex;
-	    	justify-content:center;
-	    }
+	@media screen and (min-width:960px) {
+		body {
+			display: flex;
+			justify-content: center;
+		}
 	}
 
 	.CodeMirror {
@@ -24,7 +24,7 @@
 		margin: 1px;
 	}
 
-	@media screen and (min-width:1024px){
+	@media screen and (min-width:1024px) {
 		.CodeMirror {
 			border: 1px solid black;
 			font-size: 16px;
@@ -40,7 +40,7 @@
 		margin: 2 auto;
 		padding-left: 0;
 		padding-right: 0;
-		align:"center";
+		align: "center";
 	}
 
 
@@ -71,34 +71,60 @@
 		display: inline;
 		white-space: nowrap;
 	}
+
+	#navarea {
+		margin-top: 5px;
+	}
+
+	#inputarea {
+		display: flex;
+		margin-top: 5px;
+		margin-left: 5px;
+	}
+
+	#input {
+		width: 500px;
+		height: 35px;
+		font-size: 20px;
+	}
+
+	#button {
+		width: 150px;
+		height: 35px;
+		font-size: 15px;
+		margin: 2px;
+	}
 </style>
 
 <head>
 	<title>AI CodeGen</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
 </head>
 
 <body>
 	<div class="container">
 		<h3>基于Salesforce codegen和GPTJ、GPT-neo的AI代码生成</h3>
-		<ul class="nav">
-			<li><a href="javascript:onModeChange('cpp');">c  c++  c#</a></li>
-			<li><a href="javascript:onModeChange('python');">python</a></li>
-			<li><a href="javascript:onModeChange('java');">Java</a></li>
-			<li><a href="javascript:onModeChange('javascript');">javascript</a></li>
-		</ul>
-		<br>
-		<ul class="nav">
-			<li><a href="javascript:onModeChange('golang');">golang</a></li>
-			<li><a href="javascript:onModeChange('chatgpt');">GPT-neo(比较慢)</a></li>
-			<li><a href="javascript:onGenCode1();">Ctrl+Enter生成</a></li>
-		</ul>
+		<div id="navarea">
+			<ul class="nav">
+				<li><a href="javascript:onModeChange('cpp');">c c++ c#</a></li>
+				<li><a href="javascript:onModeChange('python');">python</a></li>
+				<li><a href="javascript:onModeChange('java');">Java</a></li>
+				<li><a href="javascript:onModeChange('javascript');">javascript</a></li>
+				<li><a href="javascript:onModeChange('golang');">golang</a></li>
+				<li><a href="javascript:onModeChange('chatgpt');">GPT-neo(比较慢)</a></li>
+			</ul>
+		</div>
+		<div id='inputarea'>
+			<input type="text" name="input" id="input" placeholder="请输入..." onkeydown="onInputKeydown()"><br>
+			<input type="submit" value="Enter生成" id="button" onclick="onGenCode1()">
+		</div>
 		<textarea id="code"></textarea>
 		<div id="hint"></div>
 		<p>
-		VS Code插件（Codegeeker）：
+			VS Code插件（Codegeeker）：
 		<div>
-			<img src="https://gitclone.com/download1/aiit/extension.png" width="320" height="160"/>
+			<img src="https://gitclone.com/download1/aiit/extension.png" width="320" height="160" />
 		</div>
 		代码生成器源码:
 		<a href="https://github.com/git-cloner/codegen" target="_blank">https://github.com/git-cloner/codegen</a>
@@ -112,46 +138,53 @@
 		mode: "text/x-c",
 		lineNumbers: true,
 		theme: "eclipse",
-		lineWrapping:true,
+		lineWrapping: true,
 		extraKeys: {
 			"Ctrl-Enter": function (cm) {
 				onGenCode(cm.getValue());
 			}
 		}
 	});
-	onModeChange('cpp') ;
-	
+	onModeChange('cpp');
+	document.getElementById("input").focus();
 
 	function onGenCode1() {
-		context = editor.getValue();
+		context = document.getElementById("input").value;
 		onGenCode(context);
+	}
+
+	function onInputKeydown() {
+		var e = window.event || arguments.callee.caller.arguments[0];
+		if (e.keyCode == 13) {
+			onGenCode1();
+		}
 	}
 
 	function onModeChange(modename) {
 		modestr = "";
 		if (modename == "cpp") {
 			modestr = "text/x-c";
-			editor.setValue("int add(int x,int y){");
+			document.getElementById("input").value = "int add(int x,int y){";
 		} else if (modename == "python") {
 			modestr = "text/x-python";
-			editor.setValue("def hello_world():");
+			document.getElementById("input").value = "def hello_world():";
 		} else if (modename == "java") {
 			modestr = "text/x-java";
-			editor.setValue("int add(int x,int y){");
+			document.getElementById("input").value = "int add(int x,int y){";
 		} else if (modename == "javascript") {
 			modestr = "javascript";
-			editor.setValue("function Add(x,y,z){");
+			document.getElementById("input").value = "function Add(x,y,z){";
 		} else if (modename == "golang") {
 			modestr = "text/x-go";
-			editor.setValue("func IsBlacklist(bl []string,url string) bool{");
-		} else{
+			document.getElementById("input").value = "func IsBlacklist(bl []string,url string) bool{";
+		} else {
 			modestr = "python";
-			editor.setValue("写一个python版的数组排序");
+			document.getElementById("input").value = "写一个python版的数组排序";
 		}
 		editor.setOption("mode", modestr)
 		editor.focus();
 		editor.setCursor(editor.lineCount(), 0);
-		setTimeout("onGenCode1()",500) ;
+		setTimeout("onGenCode1()", 500);
 	}
 
 	function onGenCode(context) {
@@ -168,12 +201,14 @@
 		xhr.onload = function () {
 			json = JSON.parse(xhr.response);
 			console.log(json);
-			context = context + '\n' + json.result;
+			context = "#Q:" + context + "\n\n" + "##A:\n" + context + "\n" + json.result;
 			var index = 0;
 			function type() {
 				editor.setValue(context.substring(0, index++));
 				if (index >= context.length) {
 					clearInterval(timer);
+					document.getElementById("input").value = "";
+					document.getElementById("input").focus();
 				}
 			}
 			var timer = setInterval(type, 10);

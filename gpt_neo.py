@@ -1,3 +1,4 @@
+from functools import lru_cache
 from transformers import pipeline
 import gradio as gr
 import torch
@@ -22,7 +23,7 @@ def gpt_load_model():
         translator_en2zh = pipeline(
             "translation", model="Helsinki-NLP/opus-mt-en-zh")
 
-
+@lru_cache(maxsize=1024, typed=False)
 def gpt_generate(inputs, maxlength):
     global generator
     global translator_zh2en
@@ -44,16 +45,21 @@ def gpt_generate(inputs, maxlength):
     else:
         return results[0]['generated_text']
 
+def chat(message, history):
+    history = history or []
+    response = gpt_generate(message,128)
+    history.append((message, response))
+    return history, history
 
 def create_ui():
-    inputs = gr.inputs.Textbox(lines=10, placeholder="Enter sentence...")
-    maxlength = gr.Dropdown(choices=["64", "128", "256", "1024"], value="64")
-    interface = gr.Interface(fn=gpt_generate,
-                             inputs=[inputs, maxlength],
-                             outputs=gr.outputs.HTML(label="output"),
-                             title='gpt-neo generator')
+    chatbot = gr.Chatbot().style(color_map=("green", "gray"))
+    interface = gr.Interface(
+        chat,
+        ["text", "state"],
+        [chatbot, "state"],
+        allow_flagging="never",
+    )
     interface.launch(server_name='0.0.0.0')
-
 
 if __name__ == "__main__":
     torch.cuda.set_device(1)
