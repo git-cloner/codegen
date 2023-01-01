@@ -12,7 +12,7 @@ Support ChatGPT Now
 
 https://gitclone.com/aiit/codegen
 
-https://gitclone.com/aiit/chat
+https://gitclone.com/aiit/chat/
 
 ## Visual Studio Code  Extension
 
