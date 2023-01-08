@@ -1,7 +1,7 @@
 import './App.css';
 import Chat, { Bubble, useMessages } from '@chatui/core';
 import '@chatui/core/dist/index.css';
-
+import React, { useEffect } from 'react'
 
 const defaultQuickReplies = [
   {
@@ -121,6 +121,36 @@ function App() {
     xhr.send('{"context":"' + context + '","maxlength":32}');
   }
 
+  function findInArr(arr, n) {
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i] === n) return true;
+    }
+    return false;
+  };
+
+  function getByClass(oParent, sClass) {
+    if (document.getElementsByClassName) {
+      return oParent.getElementsByClassName(sClass);
+    } else {
+      var aEle = oParent.getElementsByTagName('*');
+      var arr = [];
+      for (var i = 0; i < aEle.length; i++) {
+        var tmp = aEle[i].className.split(' ');
+        if (findInArr(tmp, sClass)) {
+          arr.push(aEle[i]);
+        }
+      }
+      return arr;
+    }
+  }
+
+  useEffect(() => {
+    var oUl = document.getElementById('root');
+    var aBox = getByClass(oUl, 'Input Input--outline Composer-input');
+    if (aBox.length > 0) {
+      aBox[0].focus();
+    }
+  })
   return (
     <div style={{ height: 'calc(100vh - 10px)', marginTop: '-5px' }}>
       <Chat
