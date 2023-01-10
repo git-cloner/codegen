@@ -50,9 +50,10 @@ def gpt_generate(inputs, maxlength):
     print("output: ", results)
     if flag_chs:
         #results = translator_en2zh(results[0]['generated_text'])
+        results_en = results
         results = translator_en2zh(results)
         print("en2zh:", results)
-        return results[0]['translation_text']
+        return results_en + '\n' + results[0]['translation_text']
     else:
         return results
 

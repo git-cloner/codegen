@@ -35,7 +35,7 @@ const defaultQuickReplies = [
 const initialMessages = [
   {
     type: 'text',
-    content: { text: '您好，我是AI编程助理，开源于：https://github.com/git-cloner/codegen，还提供VS Code插件codegeeker' },
+    content: { text: '您好，我是AI编程助理，开源于：https://github.com/git-cloner/codegen，还提供VS Code插件codegeeker，注意python以冒号结尾，其他编程语言以{结尾。' },
     user: { avatar: '//gitclone.com/download1/gitclone.png' },
   },
   {
