@@ -67,7 +67,7 @@ def cast(model, fp16=True):
 
 def create_model(ckpt, fp16=True):
     if fp16:
-        return CodeGenForCausalLM.from_pretrained(ckpt, revision='float16', torch_dtype=torch.float16, low_cpu_mem_usage=True)
+        return CodeGenForCausalLM.from_pretrained(ckpt, revision='float16', torch_dtype=torch.float16, low_cpu_mem_usage=False)
     else:
         return CodeGenForCausalLM.from_pretrained(ckpt)
 

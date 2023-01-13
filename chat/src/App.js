@@ -1,7 +1,9 @@
 import './App.css';
-import Chat, { Bubble, useMessages } from '@chatui/core';
+import Chat, { Bubble, useMessages, Progress } from '@chatui/core';
 import '@chatui/core/dist/index.css';
-import React, { useEffect } from 'react'
+import '@chatui/core/es/styles/index.less';
+import React, { useEffect, useState } from 'react';
+import './chatui-theme.css';
 
 const defaultQuickReplies = [
   {
@@ -48,19 +50,20 @@ const initialMessages = [
 
 function App() {
   const { messages, appendMsg, setTyping } = useMessages(initialMessages);
+  const [percentage, setPercentage] = useState(0);
 
   function handleSend(type, val) {
     if (type === 'text' && val.trim()) {
       appendMsg({
         type: 'text',
         content: { text: val },
-        position: 'right',
+        position: 'left',
         user: { avatar: '//gitclone.com/download1/user.png' },
       });
 
       setTyping(true);
-
-      onGenCode(val);
+      setPercentage(10);
+      onGenCode(val, val, 0);
     }
   }
 
@@ -90,7 +93,7 @@ function App() {
     } else if (item.name === "Java") {
       content = "int add(int x,int y){";
     } else if (item.name === "javascript") {
-      content = "function Add(x,y,z){";
+      content = "function Add(x,y){";
     } else if (item.name === "golang") {
       content = "func IsBlacklist(bl []string,url string) bool{";
     } else {
@@ -99,26 +102,57 @@ function App() {
     handleSend('text', content);
   }
 
-  function onGenCode(context) {
-    var sl = context.trim().split("\n");
-    context = sl[sl.length - 1];
-    if (context.trim() === "") {
-      alert("输入不能为空！")
+  function onGenCode(context_en, context_ch, count) {
+    if (count >= 5) {
+      setPercentage(0);
       return;
     }
     let xhr = new XMLHttpRequest();
-    xhr.open('post', 'https://gitclone.com/aiit/codegen');
+    xhr.open('post', 'https://gitclone.com/aiit/codegen_stream');
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onload = function () {
       var json = JSON.parse(xhr.response);
-      context = context + "\n" + json.result;
-      appendMsg({
-        type: 'text',
-        content: { text: context },
-        user: { avatar: '//gitclone.com/download1/gitclone.png' },
-      });
+      if (count === 0) {
+        context_en = context_en + "\n" + json.result_en;
+        context_ch = context_ch + "\n" + json.result_ch;
+        appendMsg({
+          type: 'text',
+          content: { text: context_ch },
+          user: { avatar: '//gitclone.com/download1/gitclone.png' },
+        });
+      } else {
+        if (("" === json.result_en.trim()) || json.result_en.trim().startsWith("A:") || json.result_en.trim().endsWith("A:")) {
+          setPercentage(0);
+          return;
+        }
+        context_en = context_en + json.result_en;
+        context_ch = context_ch + json.result_ch;
+        if (context_ch === context_en) {
+          updateMsg(context_en);
+        } else {
+          updateMsg(context_ch + "\n" + context_en);
+        }
+
+      }
+      count++;
+      setPercentage(count * 20);
+      onGenCode(context_en, context_ch, count);
     }
-    xhr.send('{"context":"' + context + '","maxlength":32}');
+    xhr.send(JSON.stringify({
+      "context": context_en,
+      "maxlength": 16,
+      "modelname": "codegen"
+    }));
+
+    function updateMsg(context_ch) {
+      var oUl = document.getElementById('root');
+      var aBox = getByClass(oUl, 'Bubble text');
+      if (aBox.length > 0) {
+        aBox[aBox.length - 1].innerHTML = "<p>" + context_ch + "</p>";
+        var msgList = getByClass(oUl, "PullToRefresh")[0];
+        msgList.scrollTo(0, msgList.scrollHeight);
+      }
+    }
   }
 
   function findInArr(arr, n) {
@@ -169,7 +203,7 @@ function App() {
               title: 'More',
             },
           ],
-          title: '基于Salesforce codegen和GPTJ、GPT-neo的AI代码生成',
+          title: '基于Salesforce codegen和GPTJ的AI代码生成',
         }}
         messages={messages}
         renderMessageContent={renderMessageContent}
@@ -177,6 +211,7 @@ function App() {
         onQuickReplyClick={handleQuickReplyClick}
         onSend={handleSend}
       />
+      <Progress value={percentage} />
     </div>
   );
 }
