@@ -34,7 +34,10 @@ def getAnswerFromChatGPTJ6B(context, maxlength):
     headers = {'content-type': 'application/json;charset=utf-8'}
     r = requests.post(url, data=data.encode(), headers=headers)
     res = r.json()
-    return res['completion']
+    if r.status_code == 200 :
+        return res['completion']
+    else:
+        return ""
 
 
 @lru_cache(maxsize=1024, typed=False)
