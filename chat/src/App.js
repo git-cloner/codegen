@@ -7,6 +7,11 @@ import './chatui-theme.css';
 
 const defaultQuickReplies = [
   {
+    name: 'GPT',
+    isNew: true,
+    isHighlight: true,
+  },
+  {
     icon: 'message',
     name: 'c c++ c#',
   },
@@ -25,12 +30,7 @@ const defaultQuickReplies = [
   {
     icon: 'message',
     name: 'golang',
-  },
-  {
-    name: 'GPT',
-    isNew: true,
-    isHighlight: true,
-  },
+  },  
 ];
 
 
@@ -53,6 +53,10 @@ function App() {
   const [percentage, setPercentage] = useState(0);
 
   function handleSend(type, val) {
+    if (percentage>0) {
+      alert("正在生成，请稍候！") ;
+      return ;
+    }
     if (type === 'text' && val.trim()) {
       appendMsg({
         type: 'text',
