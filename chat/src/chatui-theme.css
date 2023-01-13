@@ -3,6 +3,9 @@
   line-height:14px ;
 }
 .ChatApp,
+.Bubble{
+  max-width: 100vw;
+}
 .MessageContainer,
 .Navbar,
 .Message .Bubble,
