@@ -10,8 +10,6 @@ Support GPT-J Now
 
 ## Online demo
 
-https://gitclone.com/aiit/codegen
-
 https://gitclone.com/aiit/chat/
 
 ## Visual Studio Code  Extension
