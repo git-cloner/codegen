@@ -27,7 +27,7 @@ def gpt_load_model():
 
 
 def getAnswerFromChatGPTJ6B(context, maxlength):
-    url = 'http://172.16.62.66:8081/generate/'
+    url = 'http://172.16.62.136:8081/generate/'
     data = '{' + '"text": "' + context + '",' + '"generate_tokens_limit": ' + \
         str(maxlength) + ',' + '"top_p": 0.7,' + \
         '"top_k": 0,' + '"temperature":0.9' + '}'
