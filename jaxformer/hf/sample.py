@@ -205,7 +205,7 @@ def load_model():
     set_seed(42, deterministic=True)
     device = torch.device('cuda:0')
     use_fp16 = True
-    model_name = "codegen-350M-nl"
+    model_name = "codegen-6B-mono"
     ckpt = f'./checkpoints/{model_name}'
     # (3) load
     with print_time('loading parameters'):
