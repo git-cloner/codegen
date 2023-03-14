@@ -119,6 +119,7 @@ function App() {
       if (count === 0) {
         context_en = context_en + "\n" + json.result_en;
         context_ch = context_ch + "\n" + json.result_ch;
+        var stop = json.stop ;
         appendMsg({
           type: 'text',
           content: { text: context_ch },
@@ -140,6 +141,10 @@ function App() {
       }
       count++;
       setPercentage(count * 20);
+      if(stop){
+        setPercentage(0);
+        return;
+      } 
       onGenCode(context_en, context_ch, count);
     }
     xhr.send(JSON.stringify({
@@ -207,7 +212,7 @@ function App() {
               title: 'More',
             },
           ],
-          title: '基于Salesforce codegen和GPTJ的AI代码生成',
+          title: '基于Salesforce codegen和GPT-J-6B的AI代码生成',
         }}
         messages={messages}
         renderMessageContent={renderMessageContent}

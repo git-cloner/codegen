@@ -23,13 +23,14 @@ async def codegen_stream(request):
     f = lambda x='ddd': sum(
         [1 if u'\u4e00' <= i <= u'\u9fff' else 0 for i in x]) > 0
     flag_chs = f(context)
+    stop = False
     if flag_chs:
         results = sampling_gptj(context, maxlength)
         results = json.loads(results)
         result_en = results["result_en"]
         result_ch = results["result_ch"]
     else:
-        result_en = sampling(context, maxlength)
+        result_en,stop = sampling(context, maxlength)
         result_ch = result_en
     end = time.perf_counter()
     print(time.strftime("%Y-%m-%d %H:%M:%S",
@@ -37,6 +38,6 @@ async def codegen_stream(request):
     return web.Response(
         content_type="application/json",
         text=json.dumps(
-            {"result_en": result_en, "result_ch": result_ch, "time": end-start}
+            {"result_en": result_en, "result_ch": result_ch, "time": end-start,"stop":stop}
         ),
     )

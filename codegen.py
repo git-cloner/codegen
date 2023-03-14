@@ -41,16 +41,17 @@ async def codegen(request):
     start = time.perf_counter()
     print(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime()),"context : " + context)
     context = context.replace("//","").replace("#","").strip()
+    stop = False
     if flag_chs :#or content.startwith('gpt-j') :
         result = getAnswerFromChatGPTJ(context,maxlength).replace(context,"")
     else:
-        result = sampling(context,maxlength)
+        result,stop = sampling(context,maxlength)
     end = time.perf_counter()
     print(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime()),"result  : " + result)
     return web.Response(
         content_type="application/json",
         text=json.dumps(
-            {"result": result,"time":end-start}
+            {"result": result,"time":end-start,"stop":stop}
         ),
     )
 

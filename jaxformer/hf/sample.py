@@ -153,9 +153,10 @@ def truncate(completion):
         [
             '^#',
             re.escape('<|endoftext|>'),
-            "^'''",
-            '^"""',
-            '\n\n\n'
+            "^\s*'''",
+            '^\s*"""',
+            '^\s*\n\n\n',
+            '^\s*\n    \n    \n    \n'
         ]
     ]
 
@@ -206,6 +207,7 @@ def load_model():
     device = torch.device('cuda:0')
     use_fp16 = True
     model_name = "codegen-6B-mono"
+    # model_name = "codegen-350M-mono"  # test on windows
     ckpt = f'./checkpoints/{model_name}'
     # (3) load
     with print_time('loading parameters'):
@@ -244,7 +246,10 @@ def sampling(input_context,max_length):
             top_p=g_top_p,
             max_length_sample=max_length)
         truncation = truncate(completion[0])
-        return truncation
+        stop = False
+        if truncation != completion[0] :
+            stop = True
+        return truncation,stop
 
 if __name__ == '__main__':
     test_truncate()
