@@ -83,4 +83,5 @@ input params: {"context":"写一个python版的数组排序","maxlength":128}
 ## reference
 https://zhuanlan.zhihu.com/p/598982945 做一个生产级别的类似ChatGPT的聊天机器人<br>
 https://www.zhihu.com/zvideo/1596160335995641856 基于gpt-j-6b的聊天机器人<br>
-https://zhuanlan.zhihu.com/p/594946225 在亚马逊aws的云主机上搭建gpt-j-6b模型
+https://zhuanlan.zhihu.com/p/594946225 在亚马逊aws的云主机上搭建gpt-j-6b模型<br>
+https://zhuanlan.zhihu.com/p/588616069 做一个类似github copilot的免费代码生成器
