@@ -1,12 +1,12 @@
 # Codegen
 
-Salesforce codegen with web server
+Salesforce codegen,GPT-J-6B with web server
 
 Fork from https://github.com/salesforce/CodeGen
 
 Add web server support 
 
-Support GPT-J Now
+Support GPT-J-6B Now
 
 ## Online demo
 
@@ -76,6 +76,11 @@ return params:
     "time": 1.9620850095525384
 }
 
-#### Use GPT-J
+#### Use GPT-J-6B
 
 input params: {"context":"写一个python版的数组排序","maxlength":128}
+
+## reference
+https://zhuanlan.zhihu.com/p/598982945
+https://www.zhihu.com/zvideo/1596160335995641856
+https://zhuanlan.zhihu.com/p/594946225
