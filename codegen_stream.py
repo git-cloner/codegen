@@ -4,6 +4,7 @@ from aiohttp import web
 import json
 from jaxformer.hf.sample import load_model, sampling
 from gpt_j import gpt_load_model, gpt_generate_stream
+from ChatGLM_6b import getAnswerFromChatGLM6b
 
 
 def sampling_gptj(context, maxlength):
@@ -25,10 +26,13 @@ async def codegen_stream(request):
     flag_chs = f(context)
     stop = False
     if flag_chs:
-        results = sampling_gptj(context, maxlength)
-        results = json.loads(results)
-        result_en = results["result_en"]
-        result_ch = results["result_ch"]
+        # results = sampling_gptj(context, maxlength)
+        # results = json.loads(results)
+        # result_en = results["result_en"]
+        # result_ch = results["result_ch"]
+        result_en = getAnswerFromChatGLM6b(context)
+        result_ch = result_en
+        stop = True
     else:
         result_en,stop = sampling(context, maxlength)
         result_ch = result_en

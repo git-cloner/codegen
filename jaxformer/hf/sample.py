@@ -207,7 +207,8 @@ def load_model():
     device = torch.device('cuda:0')
     use_fp16 = True
     model_name = "codegen-6B-mono"
-    # model_name = "codegen-350M-mono"  # test on windows
+    if os.name == 'nt':
+        model_name = "codegen-350M-mono"  # test on windows
     ckpt = f'./checkpoints/{model_name}'
     # (3) load
     with print_time('loading parameters'):

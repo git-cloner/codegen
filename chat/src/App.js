@@ -212,7 +212,7 @@ function App() {
               title: 'More',
             },
           ],
-          title: '基于Salesforce codegen和GPT-J-6B的AI代码生成',
+          title: '基于Salesforce codegen和清华THUDM/ChatGLM-6B的AI代码生成',
         }}
         messages={messages}
         renderMessageContent={renderMessageContent}

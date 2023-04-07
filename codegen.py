@@ -9,6 +9,7 @@ from aiohttp import web
 from jaxformer.hf.sample import load_model,sampling
 from gpt_j import gpt_load_model,gpt_generate
 from codegen_stream import codegen_stream
+from ChatGLM_6b import getAnswerFromChatGLM6b
 
 ROOT = os.path.dirname(__file__)
 
@@ -43,7 +44,8 @@ async def codegen(request):
     context = context.replace("//","").replace("#","").strip()
     stop = False
     if flag_chs :#or content.startwith('gpt-j') :
-        result = getAnswerFromChatGPTJ(context,maxlength).replace(context,"")
+        # result = getAnswerFromChatGPTJ(context,maxlength).replace(context,"")
+        result = getAnswerFromChatGLM6b(context)
     else:
         result,stop = sampling(context,maxlength)
     end = time.perf_counter()
