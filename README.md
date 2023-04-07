@@ -1,12 +1,12 @@
 # Codegen
 
-Salesforce codegen,GPT-J-6B with web server
+Salesforce codegen,THUDM/ChatGLM-6B with web server
 
 Fork from https://github.com/salesforce/CodeGen
 
 Add web server support 
 
-Support GPT-J-6B Now
+Support THUDM/ChatGLM-6B Now
 
 ## Online demo
 
@@ -82,6 +82,6 @@ return params:
     "time": 1.9620850095525384
 }
 
-#### Use GPT-J-6B
+#### Use THUDM/ChatGLM-6B
 
 input params: {"context":"写一个python版的数组排序","maxlength":128}
