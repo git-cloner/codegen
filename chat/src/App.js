@@ -30,7 +30,7 @@ const defaultQuickReplies = [
   {
     icon: 'message',
     name: 'golang',
-  },  
+  },
 ];
 
 
@@ -52,10 +52,10 @@ function App() {
   const { messages, appendMsg, setTyping } = useMessages(initialMessages);
   const [percentage, setPercentage] = useState(0);
 
-  function handleSend(type, val) {
-    if (percentage>0) {
-      alert("正在生成，请稍候！") ;
-      return ;
+  function handleSend(type, val, item_name) {
+    if (percentage > 0) {
+      alert("正在生成，请稍候！");
+      return;
     }
     if (type === 'text' && val.trim()) {
       appendMsg({
@@ -64,10 +64,14 @@ function App() {
         position: 'left',
         user: { avatar: '//gitclone.com/download1/user.png' },
       });
-
       setTyping(true);
       setPercentage(10);
-      onGenCode(val, val, 0);
+      if (item_name === undefined) {
+        if (isChinese(val)) {
+          item_name = "GPT";
+        }
+      }
+      onGenCode(val, val, 0, item_name);
     }
   }
 
@@ -103,23 +107,38 @@ function App() {
     } else {
       content = "写一个python版的数组排序";
     }
-    handleSend('text', content);
+    handleSend('text', content, item.name);
   }
 
-  function onGenCode(context_en, context_ch, count) {
-    if (count >= 5) {
+  function Sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms))
+  }
+
+  async function onGenCode(context_en, context_ch, count, item_name) {
+    var context_gpt = context_en;
+    var stop = false;
+    var x = 5;
+    if (item_name === "GPT") {
+      x = 1000;
+      await Sleep(500);
+    }
+    if (count >= x) {
       setPercentage(0);
       return;
     }
     let xhr = new XMLHttpRequest();
     xhr.open('post', 'https://gitclone.com/aiit/codegen_stream');
+    //xhr.open('post', 'http://localhost:5000/codegen_stream');
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onload = function () {
       var json = JSON.parse(xhr.response);
       if (count === 0) {
         context_en = context_en + "\n" + json.result_en;
         context_ch = context_ch + "\n" + json.result_ch;
-        var stop = json.stop ;
+        stop = json.stop;
+        if (item_name === "GPT") {
+          context_ch = json.result_ch;
+        }
         appendMsg({
           type: 'text',
           content: { text: context_ch },
@@ -132,20 +151,34 @@ function App() {
         }
         context_en = context_en + json.result_en;
         context_ch = context_ch + json.result_ch;
+        stop = json.stop;
         if (context_ch === context_en) {
-          updateMsg(context_en);
+          if (item_name === "GPT") {
+            updateMsg(json.result_en);
+          }
+          else {
+            updateMsg(context_en);
+          }
         } else {
-          updateMsg(context_ch + "\n" + context_en);
+          if (item_name === "GPT") {
+            updateMsg(json.result_en);
+          } else {
+            updateMsg(context_ch + "\n" + context_en);
+          }
         }
 
       }
       count++;
       setPercentage(count * 20);
-      if(stop){
+      if (stop) {
         setPercentage(0);
         return;
-      } 
-      onGenCode(context_en, context_ch, count);
+      }
+      if (item_name === "GPT") {
+        onGenCode(context_gpt, context_gpt, count, item_name);
+      } else {
+        onGenCode(context_en, context_ch, count, item_name);
+      }
     }
     xhr.send(JSON.stringify({
       "context": context_en,
@@ -184,6 +217,15 @@ function App() {
         }
       }
       return arr;
+    }
+  }
+
+  function isChinese(s) {
+    let reg = new RegExp("[\\u4E00-\\u9FFF]+", "g")
+    if (reg.test(s)) {
+      return true;
+    } else {
+      return false;
     }
   }
 

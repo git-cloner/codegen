@@ -26,13 +26,12 @@ async def codegen_stream(request):
     flag_chs = f(context)
     stop = False
     if flag_chs:
-        # results = sampling_gptj(context, maxlength)
-        # results = json.loads(results)
-        # result_en = results["result_en"]
-        # result_ch = results["result_ch"]
         result_en = getAnswerFromChatGLM6b(context)
-        result_ch = result_en
-        stop = True
+        stop = result_en.endswith("[stop]")
+        result_ch = result_en.replace("[stop]", "")
+        if result_ch == "" :
+            result_ch = "思考中"
+        result_en = result_ch
     else:
         result_en,stop = sampling(context, maxlength)
         result_ch = result_en
