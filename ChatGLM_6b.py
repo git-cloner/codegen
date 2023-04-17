@@ -7,7 +7,7 @@ def getAnswerFromChatGLM6b(context):
         url = 'http://172.16.62.66:8000/stream'
     else:
         url = 'http://172.16.62.136:8000/stream'
-    data = '{"prompt": "'  + context +  '", "history": []}'
+    data = '{"prompt": "'  + context.replace('\r', '').replace('\n', '') +  '", "history": []}'
     headers = {'content-type': 'application/json;charset=utf-8'}
     r = requests.post(url, data=data.encode(), headers=headers)
     res = r.json()

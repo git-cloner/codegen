@@ -119,7 +119,7 @@ function App() {
     var stop = false;
     var x = 5;
     if (item_name === "GPT") {
-      x = 1000;
+      x = 120 ;
       await Sleep(500);
     }
     if (count >= x) {
