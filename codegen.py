@@ -10,6 +10,7 @@ from jaxformer.hf.sample import load_model,sampling
 from gpt_j import gpt_load_model,gpt_generate
 from codegen_stream import codegen_stream
 from ChatGLM_6b import getAnswerFromChatGLM6b
+from Vicuna_7b import getAnswerFromVicuna7b
 
 ROOT = os.path.dirname(__file__)
 
@@ -28,6 +29,7 @@ async def codegen(request):
     params = await request.json()
     context = params["context"]
     maxlength = params["maxlength"]
+    modelname = "codegen"
     #support chs
     flag_chs = False
     f = lambda x='ddd':sum([1 if u'\u4e00' <= i <= u'\u9fff' else 0 for i in x])>0
@@ -44,7 +46,10 @@ async def codegen(request):
     context = context.replace("//","").replace("#","").strip()
     stop = False
     if flag_chs :
-        result = getAnswerFromChatGLM6b(context)
+        if modelname == 'vicuna-7b':
+            result_en = getAnswerFromVicuna7b(context)
+        else:
+            result_en = getAnswerFromChatGLM6b(context)
         stop = result.endswith("[stop]")
         result = result.replace("[stop]", "")
     else:

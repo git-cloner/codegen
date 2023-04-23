@@ -5,7 +5,7 @@ import json
 from jaxformer.hf.sample import load_model, sampling
 from gpt_j import gpt_load_model, gpt_generate_stream
 from ChatGLM_6b import getAnswerFromChatGLM6b
-
+from Vicuna_7b import getAnswerFromVicuna7b
 
 def sampling_gptj(context, maxlength):
     gpt_load_model()
@@ -26,7 +26,10 @@ async def codegen_stream(request):
     flag_chs = f(context)
     stop = False
     if flag_chs:
-        result_en = getAnswerFromChatGLM6b(context)
+        if modelname == 'vicuna-7b':
+            result_en = getAnswerFromVicuna7b(context)
+        else:
+            result_en = getAnswerFromChatGLM6b(context)
         stop = result_en.endswith("[stop]")
         result_ch = result_en.replace("[stop]", "")
         if result_ch == "" :

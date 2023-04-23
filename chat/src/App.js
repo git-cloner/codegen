@@ -5,9 +5,16 @@ import '@chatui/core/es/styles/index.less';
 import React, { useEffect, useState } from 'react';
 import './chatui-theme.css';
 
+var modelname = "ChatGLM-6b";
+
 const defaultQuickReplies = [
   {
-    name: 'GPT',
+    name: 'ChatGLM-6b',
+    isNew: true,
+    isHighlight: true,
+  },
+  {
+    name: 'Vicuna-7b',
     isNew: true,
     isHighlight: true,
   },
@@ -37,7 +44,7 @@ const defaultQuickReplies = [
 const initialMessages = [
   {
     type: 'text',
-    content: { text: '您好，我是AI编程助理，开源于：https://github.com/git-cloner/codegen，还提供VS Code插件codegeeker，注意python以冒号结尾，其他编程语言以{结尾。' },
+    content: { text: '开源：https://github.com/git-cloner/codegen' },
     user: { avatar: '//gitclone.com/download1/gitclone.png' },
   },
   {
@@ -54,7 +61,7 @@ function App() {
 
   function handleSend(type, val, item_name) {
     if (percentage > 0) {
-      alert("正在生成，请稍候！");
+      alert("正在生成中，请稍候，或刷新页面！");
       return;
     }
     if (type === 'text' && val.trim()) {
@@ -93,21 +100,33 @@ function App() {
   }
 
   function handleQuickReplyClick(item) {
+    var item_name = item.name;
     var content = "int add(int x,int y){";
     if (item.name === "c c++ c#") {
       content = "int add(int x,int y){";
+      modelname = "codegen";
     } else if (item.name === "python") {
       content = "def hello_world():";
+      modelname = "codegen";
     } else if (item.name === "Java") {
       content = "int add(int x,int y){";
+      modelname = "codegen";
     } else if (item.name === "javascript") {
       content = "function Add(x,y){";
+      modelname = "codegen";
     } else if (item.name === "golang") {
       content = "func IsBlacklist(bl []string,url string) bool{";
-    } else {
+      modelname = "codegen";
+    } else if (item.name === "ChatGLM-6b") {
       content = "写一个python版的数组排序";
+      item_name = "GPT";
+      modelname = "ChatGLM-6b";
+    } else {
+      content = "你好";
+      item_name = "GPT";
+      modelname = "vicuna-7b";
     }
-    handleSend('text', content, item.name);
+    handleSend('text', content, item_name);
   }
 
   function Sleep(ms) {
@@ -119,7 +138,7 @@ function App() {
     var stop = false;
     var x = 5;
     if (item_name === "GPT") {
-      x = 120 ;
+      x = 120;
       await Sleep(500);
     }
     if (count >= x) {
@@ -183,7 +202,7 @@ function App() {
     xhr.send(JSON.stringify({
       "context": context_en,
       "maxlength": 16,
-      "modelname": "codegen"
+      "modelname": modelname
     }));
 
     function updateMsg(context_ch) {
@@ -254,7 +273,7 @@ function App() {
               title: 'More',
             },
           ],
-          title: '基于Salesforce codegen和清华THUDM/ChatGLM-6B的AI代码生成',
+          title: 'AIChat(' + modelname + ')',
         }}
         messages={messages}
         renderMessageContent={renderMessageContent}
