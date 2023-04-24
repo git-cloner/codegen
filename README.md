@@ -27,7 +27,8 @@ https://zhuanlan.zhihu.com/p/594946225 在亚马逊aws的云主机上搭建gpt-j
 https://zhuanlan.zhihu.com/p/588616069 做一个类似github copilot的免费代码生成器<br>
 https://zhuanlan.zhihu.com/p/620233511 清华ChatGLM-6B模型实践<br>
 https://zhuanlan.zhihu.com/p/620070973 ColossalAI推理实践<br>
-https://zhuanlan.zhihu.com/p/619954588 Chinese-LLaMA-Alpaca实践
+https://zhuanlan.zhihu.com/p/619954588 Chinese-LLaMA-Alpaca实践<br>
+https://zhuanlan.zhihu.com/p/624286959 FastChat部署与流式调用实践
 
 ## usage
 
