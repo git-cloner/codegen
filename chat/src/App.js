@@ -44,15 +44,9 @@ const defaultQuickReplies = [
 const initialMessages = [
   {
     type: 'text',
-    content: { text: '开源：https://github.com/git-cloner/codegen' },
+    content: { text: '您好，请输入编程、科学、技术、历史、文化、生活、趣味等领域的问题，本项目开源于https://github.com/git-cloner/codegen' },
     user: { avatar: '//gitclone.com/download1/gitclone.png' },
-  },
-  {
-    type: 'image',
-    content: {
-      picUrl: '//gitclone.com/download1/aiit/extension.png',
-    },
-  },
+  }
 ];
 
 function App() {
@@ -118,7 +112,7 @@ function App() {
       content = "func IsBlacklist(bl []string,url string) bool{";
       modelname = "codegen";
     } else if (item.name === "ChatGLM-6b") {
-      content = "写一个python版的数组排序";
+      content = "你好";
       item_name = "GPT";
       modelname = "ChatGLM-6b";
     } else {
