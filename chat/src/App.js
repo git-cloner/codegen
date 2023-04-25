@@ -267,7 +267,7 @@ function App() {
               title: 'More',
             },
           ],
-          title: 'AIChat(' + modelname + ')',
+          title: 'AIITChat(' + modelname + ')',
         }}
         messages={messages}
         renderMessageContent={renderMessageContent}

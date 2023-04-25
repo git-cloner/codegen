@@ -15,6 +15,9 @@
   background-size: cover;
 }
 .ChatFooter .Composer-input {
-  height: 60px;
-  background: #ddd ;
+  background: white;
+  max-height: 160px;
+  border: 1px solid darkgray;
+  min-height: 80px;
+  height: auto;
 }
