@@ -274,6 +274,7 @@ function App() {
         quickReplies={defaultQuickReplies}
         onQuickReplyClick={handleQuickReplyClick}
         onSend={handleSend}
+        placeholder="请输入您的问题，shift + 回车换行"
       />
       <Progress value={percentage} />
     </div>
