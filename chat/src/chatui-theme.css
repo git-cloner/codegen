@@ -14,10 +14,29 @@
   background-repeat: no-repeat;
   background-size: cover;
 }
+
 .ChatFooter .Composer-input {
   background: white;
   max-height: 160px;
   border: 1px solid darkgray;
   min-height: 80px;
   height: auto;
+}
+
+@media (max-width: 767px) {
+  .ChatFooter .Composer-input {
+    background: white;
+    max-height: 80px;
+    border: 1px solid darkgray;
+    min-height: 40px;
+    height: auto;
+  }
+}
+
+.ScrollView--x .ScrollView-scroller {
+  display: flex;
+  margin-bottom: -1.7rem;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  padding-bottom: 1.125rem;
 }

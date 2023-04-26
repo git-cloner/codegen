@@ -250,7 +250,7 @@ function App() {
     }
   })
   return (
-    <div style={{ height: 'calc(100vh - 10px)', marginTop: '-5px' }}>
+    <div style={{ height: 'calc(100vh - 2px)', marginTop: '-5px' }}>
       <Chat
         navbar={{
           leftContent: {
