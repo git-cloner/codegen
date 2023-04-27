@@ -7,9 +7,28 @@ from gpt_j import gpt_load_model, gpt_generate_stream
 from ChatGLM_6b import getAnswerFromChatGLM6b
 from Vicuna_7b import getAnswerFromVicuna7b
 
+filter_string = None
+
+
 def sampling_gptj(context, maxlength):
     gpt_load_model()
     return gpt_generate_stream(context, maxlength)
+
+
+def filter_context(context):
+    global filter_string
+    if filter_string is None:
+        print("loading filter")
+        try:
+            with open('filter.txt', mode='r', encoding='utf-8') as f:
+                text = f.read()
+            filter_string = text.split('\n')
+        except FileNotFoundError as err:
+           filter_string = []
+    for line in filter_string:
+        if line in context:
+            return True
+    return False
 
 
 async def codegen_stream(request):
@@ -17,6 +36,16 @@ async def codegen_stream(request):
     context = params["context"]
     maxlength = params["maxlength"]
     modelname = params["modelname"]
+    # filter
+    if filter_context(context):
+        return web.Response(
+            content_type="application/json",
+            text=json.dumps(
+                {"result_en": "请更换问题重新输入", "result_ch": "请更换问题重新输入",
+                    "time": 0, "stop": True}
+            ),
+        )
+
     start = time.perf_counter()
     print(time.strftime("%Y-%m-%d %H:%M:%S",
           time.localtime()), "context : " + context)
@@ -32,11 +61,11 @@ async def codegen_stream(request):
             result_en = getAnswerFromChatGLM6b(context)
         stop = result_en.endswith("[stop]")
         result_ch = result_en.replace("[stop]", "")
-        if result_ch == "" :
+        if result_ch == "":
             result_ch = "思考中"
         result_en = result_ch
     else:
-        result_en,stop = sampling(context, maxlength)
+        result_en, stop = sampling(context, maxlength)
         result_ch = result_en
     end = time.perf_counter()
     print(time.strftime("%Y-%m-%d %H:%M:%S",
@@ -44,6 +73,7 @@ async def codegen_stream(request):
     return web.Response(
         content_type="application/json",
         text=json.dumps(
-            {"result_en": result_en, "result_ch": result_ch, "time": end-start,"stop":stop}
+            {"result_en": result_en, "result_ch": result_ch,
+                "time": end-start, "stop": stop}
         ),
     )
