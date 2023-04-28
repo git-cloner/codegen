@@ -4,39 +4,36 @@ import '@chatui/core/dist/index.css';
 import '@chatui/core/es/styles/index.less';
 import React, { useEffect, useState } from 'react';
 import './chatui-theme.css';
-import {marked} from "marked";
+import { marked } from "marked";
 
 var modelname = "ChatGLM-6b";
 
 const defaultQuickReplies = [
   {
+    icon: 'message',
     name: 'ChatGLM-6b',
     isNew: true,
     isHighlight: true,
   },
   {
+    icon: 'file',
     name: 'Vicuna-7b',
     isNew: true,
     isHighlight: true,
   },
   {
-    icon: 'message',
     name: 'c c++ c#',
   },
   {
-    icon: 'message',
     name: 'python',
   },
   {
-    icon: 'message',
     name: 'Java',
   },
   {
-    icon: 'message',
     name: 'javascript',
   },
   {
-    icon: 'message',
     name: 'golang',
   },
 ];
@@ -128,7 +125,7 @@ function App() {
     return new Promise(resolve => setTimeout(resolve, ms))
   }
 
-  function markdown(code){
+  function markdown(code) {
     return marked(code);
   }
 
@@ -163,7 +160,7 @@ function App() {
           content: { text: "" },
           user: { avatar: '//gitclone.com/download1/gitclone.png' },
         });
-        setTimeout(()=>{updateMsg(context_ch);}, 200);
+        setTimeout(() => { updateMsg(context_ch); }, 200);
       } else {
         if (("" === json.result_en.trim()) || json.result_en.trim().startsWith("A:") || json.result_en.trim().endsWith("A:")) {
           setPercentage(0);
@@ -250,6 +247,10 @@ function App() {
     }
   }
 
+  function onLeftContentClick() {
+
+  }
+
   useEffect(() => {
     var oUl = document.getElementById('root');
     var aBox = getByClass(oUl, 'Input Input--outline Composer-input');
@@ -257,22 +258,20 @@ function App() {
       aBox[0].focus();
     }
   })
+
   return (
     <div style={{ height: 'calc(100vh - 2px)', marginTop: '-5px' }}>
       <Chat
         navbar={{
           leftContent: {
             icon: 'chevron-left',
-            title: 'Back',
+            title: 'Prev',
+            onClick: onLeftContentClick,
           },
           rightContent: [
             {
-              icon: 'apps',
-              title: 'Applications',
-            },
-            {
-              icon: 'ellipsis-h',
-              title: 'More',
+              icon: 'chevron-right',
+              title: 'Next',
             },
           ],
           title: 'AIITChat(' + modelname + ')',
