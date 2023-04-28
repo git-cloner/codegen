@@ -36,3 +36,25 @@
     transform: rotate(360deg);
   }
 }
+
+code {
+  background-color: #e7e7e7;
+  padding: 4px 0.5em;
+  margin: 0 4px;
+  -webkit-text-size-adjust: none;
+  overflow-x: auto;
+  white-space: pre;
+  border-radius: 8px;
+  font-size: 85%;
+}
+.Message-content pre{
+  margin: 0;
+}
+.Message-content pre>code {
+  background-color: #e7e7e7;
+  padding: 1em;
+  display: block;
+  -webkit-text-size-adjust: none;
+  overflow-x: auto;
+  white-space: pre;
+}

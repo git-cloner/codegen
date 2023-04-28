@@ -4,6 +4,7 @@ import '@chatui/core/dist/index.css';
 import '@chatui/core/es/styles/index.less';
 import React, { useEffect, useState } from 'react';
 import './chatui-theme.css';
+import {marked} from "marked";
 
 var modelname = "ChatGLM-6b";
 
@@ -127,6 +128,10 @@ function App() {
     return new Promise(resolve => setTimeout(resolve, ms))
   }
 
+  function markdown(code){
+    return marked(code);
+  }
+
   async function onGenCode(context_en, context_ch, count, item_name) {
     var context_gpt = context_en;
     var stop = false;
@@ -152,11 +157,13 @@ function App() {
         if (item_name === "GPT") {
           context_ch = json.result_ch;
         }
+        context_ch = markdown(context_ch);
         appendMsg({
           type: 'text',
-          content: { text: context_ch },
+          content: { text: "" },
           user: { avatar: '//gitclone.com/download1/gitclone.png' },
         });
+        setTimeout(()=>{updateMsg(context_ch);}, 200);
       } else {
         if (("" === json.result_en.trim()) || json.result_en.trim().startsWith("A:") || json.result_en.trim().endsWith("A:")) {
           setPercentage(0);
@@ -200,6 +207,7 @@ function App() {
     }));
 
     function updateMsg(context_ch) {
+      context_ch = markdown(context_ch);
       var oUl = document.getElementById('root');
       var aBox = getByClass(oUl, 'Bubble text');
       if (aBox.length > 0) {
