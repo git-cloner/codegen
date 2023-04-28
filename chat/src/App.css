@@ -38,7 +38,7 @@
 }
 
 code {
-  background-color: #e7e7e7;
+  background-color: #d7d7d7;
   padding: 4px 0.5em;
   margin: 0 4px;
   -webkit-text-size-adjust: none;
@@ -51,10 +51,11 @@ code {
   margin: 0;
 }
 .Message-content pre>code {
-  background-color: #e7e7e7;
+  background-color: #d7d7d7;
   padding: 1em;
   display: block;
   -webkit-text-size-adjust: none;
   overflow-x: auto;
   white-space: pre;
+  border: 1px solid #d1d0d0;
 }
