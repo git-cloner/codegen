@@ -1,6 +1,6 @@
 {
   "name": "aiitchat",
-  "version": "1.2.5",
+  "version": "1.2.8",
   "private": true,
   "dependencies": {
     "@chatui/core": "^2.4.2",

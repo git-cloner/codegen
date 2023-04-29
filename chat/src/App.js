@@ -5,8 +5,10 @@ import '@chatui/core/es/styles/index.less';
 import React, { useEffect, useState } from 'react';
 import './chatui-theme.css';
 import { marked } from "marked";
+import packageJson from '../package.json'
 
 var modelname = "ChatGLM-6b";
+var lastPrompt = "";
 
 const defaultQuickReplies = [
   {
@@ -22,20 +24,9 @@ const defaultQuickReplies = [
     isHighlight: true,
   },
   {
-    name: 'c c++ c#',
-  },
-  {
-    name: 'python',
-  },
-  {
-    name: 'Java',
-  },
-  {
-    name: 'javascript',
-  },
-  {
-    name: 'golang',
-  },
+    icon: 'chevron-up',
+    name: '复制上个问题',
+  }
 ];
 
 
@@ -65,11 +56,8 @@ function App() {
       });
       setTyping(true);
       setPercentage(10);
-      if (item_name === undefined) {
-        if (isChinese(val)) {
-          item_name = "GPT";
-        }
-      }
+      lastPrompt = val;
+      item_name = "GPT";
       onGenCode(val, val, 0, item_name);
     }
   }
@@ -92,33 +80,21 @@ function App() {
   }
 
   function handleQuickReplyClick(item) {
-    var item_name = item.name;
-    var content = "int add(int x,int y){";
-    if (item.name === "c c++ c#") {
-      content = "int add(int x,int y){";
-      modelname = "codegen";
-    } else if (item.name === "python") {
-      content = "def hello_world():";
-      modelname = "codegen";
-    } else if (item.name === "Java") {
-      content = "int add(int x,int y){";
-      modelname = "codegen";
-    } else if (item.name === "javascript") {
-      content = "function Add(x,y){";
-      modelname = "codegen";
-    } else if (item.name === "golang") {
-      content = "func IsBlacklist(bl []string,url string) bool{";
-      modelname = "codegen";
-    } else if (item.name === "ChatGLM-6b") {
-      content = "你好";
-      item_name = "GPT";
+    if (item.name.startsWith("复制")) {
+      var oUl = document.getElementById('root');
+      var aBox = getByClass(oUl, 'Input Input--outline Composer-input');
+      if (aBox.length > 0) {
+        aBox[0].value = lastPrompt;
+        aBox[0].focus();
+      }
+      return;
+    }
+    if (item.name.startsWith("ChatGLM-6b")) {
       modelname = "ChatGLM-6b";
     } else {
-      content = "你好";
-      item_name = "GPT";
       modelname = "vicuna-7b";
     }
-    handleSend('text', content, item_name);
+    handleSend('text', "你好", 'GPT');
   }
 
   function Sleep(ms) {
@@ -238,17 +214,14 @@ function App() {
     }
   }
 
-  function isChinese(s) {
-    let reg = new RegExp("[\\u4E00-\\u9FFF]+", "g")
-    if (reg.test(s)) {
-      return true;
-    } else {
-      return false;
-    }
+  function onRightContentClick() {
+    window.history.go(0);
   }
 
   function onLeftContentClick() {
-
+    const name = packageJson.name;
+    const version = packageJson.version;
+    window.alert(name + '\n' + version);
   }
 
   useEffect(() => {
@@ -264,14 +237,16 @@ function App() {
       <Chat
         navbar={{
           leftContent: {
-            icon: 'chevron-left',
-            title: 'Prev',
+            icon: 'apps',
+            title: '关于',
             onClick: onLeftContentClick,
+
           },
           rightContent: [
             {
-              icon: 'chevron-right',
-              title: 'Next',
+              icon: 'refresh',
+              title: '刷新',
+              onClick: onRightContentClick,
             },
           ],
           title: 'AIITChat(' + modelname + ')',
