@@ -9,17 +9,18 @@ import packageJson from '../package.json'
 
 var modelname = "ChatGLM-6b";
 var lastPrompt = "";
+var history = []
 
 const defaultQuickReplies = [
   {
     icon: 'message',
-    name: 'ChatGLM-6b',
+    name: 'ChatGLM',
     isNew: true,
     isHighlight: true,
   },
   {
     icon: 'file',
-    name: 'Vicuna-7b',
+    name: 'Vicuna',
     isNew: true,
     isHighlight: true,
   },
@@ -33,7 +34,7 @@ const defaultQuickReplies = [
 const initialMessages = [
   {
     type: 'text',
-    content: { text: '您好，请输入编程、科学、技术、历史、文化、生活、趣味等领域的问题，本项目开源于https://github.com/git-cloner/codegen' },
+    content: { text: '您好，请入编程、科学、技术、历史、文化、生活、趣味等领域的问题' },
     user: { avatar: '//gitclone.com/download1/gitclone.png' },
   }
 ];
@@ -41,8 +42,9 @@ const initialMessages = [
 function App() {
   const { messages, appendMsg, setTyping } = useMessages(initialMessages);
   const [percentage, setPercentage] = useState(0);
+  const msgRef = React.useRef(null);
 
-  function handleSend(type, val, item_name) {
+  function handleSend(type, val) {
     if (percentage > 0) {
       alert("正在生成中，请稍候，或刷新页面！");
       return;
@@ -57,8 +59,7 @@ function App() {
       setTyping(true);
       setPercentage(10);
       lastPrompt = val;
-      item_name = "GPT";
-      onGenCode(val, val, 0, item_name);
+      onGenCode(val, 0);
     }
   }
 
@@ -89,12 +90,12 @@ function App() {
       }
       return;
     }
-    if (item.name.startsWith("ChatGLM-6b")) {
+    if (item.name.startsWith("ChatGLM")) {
       modelname = "ChatGLM-6b";
     } else {
       modelname = "vicuna-7b";
     }
-    handleSend('text', "你好", 'GPT');
+    handleSend('text', "你好");
   }
 
   function Sleep(ms) {
@@ -105,86 +106,62 @@ function App() {
     return marked(code);
   }
 
-  async function onGenCode(context_en, context_ch, count, item_name) {
-    var context_gpt = context_en;
+  async function onGenCode(prompt, count) {
     var stop = false;
-    var x = 5;
-    if (item_name === "GPT") {
-      x = 120;
-      await Sleep(500);
-    }
+    var x = 120;
+    var result = "";
+    await Sleep(500);
     if (count >= x) {
       setPercentage(0);
       return;
     }
     let xhr = new XMLHttpRequest();
-    xhr.open('post', 'https://gitclone.com/aiit/codegen_stream');
-    //xhr.open('post', 'http://localhost:5000/codegen_stream');
+    xhr.open('post', 'https://gitclone.com/aiit/codegen_stream/v2');
+    //xhr.open('post', 'http://localhost:5000/codegen_stream/v2');
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onload = function () {
       var json = JSON.parse(xhr.response);
+      result = json.response;
+      stop = json.stop;
+      history = json.history;
       if (count === 0) {
-        context_en = context_en + "\n" + json.result_en;
-        context_ch = context_ch + "\n" + json.result_ch;
-        stop = json.stop;
-        if (item_name === "GPT") {
-          context_ch = json.result_ch;
-        }
-        context_ch = markdown(context_ch);
+        result = markdown(result);
         appendMsg({
           type: 'text',
           content: { text: "" },
           user: { avatar: '//gitclone.com/download1/gitclone.png' },
         });
-        setTimeout(() => { updateMsg(context_ch); }, 200);
+        setTimeout(() => { updateMsg(result); }, 200);
       } else {
-        if (("" === json.result_en.trim()) || json.result_en.trim().startsWith("A:") || json.result_en.trim().endsWith("A:")) {
-          setPercentage(0);
-          return;
-        }
-        context_en = context_en + json.result_en;
-        context_ch = context_ch + json.result_ch;
-        stop = json.stop;
-        if (context_ch === context_en) {
-          if (item_name === "GPT") {
-            updateMsg(json.result_en);
-          }
-          else {
-            updateMsg(context_en);
-          }
-        } else {
-          if (item_name === "GPT") {
-            updateMsg(json.result_en);
-          } else {
-            updateMsg(context_ch + "\n" + context_en);
-          }
-        }
-
+        updateMsg(result);
       }
       count++;
-      setPercentage(count * 20);
+      setPercentage(count * 10);
       if (stop) {
         setPercentage(0);
         return;
       }
-      if (item_name === "GPT") {
-        onGenCode(context_gpt, context_gpt, count, item_name);
-      } else {
-        onGenCode(context_en, context_ch, count, item_name);
-      }
+      onGenCode(prompt, count);
     }
-    xhr.send(JSON.stringify({
-      "context": context_en,
-      "maxlength": 16,
+    //只保留5个历史对话
+    if (history.length>5){
+      history.shift() ;
+    }
+    var context = JSON.stringify({
+      "context": {
+        "prompt": prompt,
+        "history": history
+      },
       "modelname": modelname
-    }));
+    });
+    xhr.send(context);
 
-    function updateMsg(context_ch) {
-      context_ch = markdown(context_ch);
+    function updateMsg(context) {
+      context = markdown(context);
       var oUl = document.getElementById('root');
       var aBox = getByClass(oUl, 'Bubble text');
       if (aBox.length > 0) {
-        aBox[aBox.length - 1].innerHTML = "<p>" + context_ch + "</p>";
+        aBox[aBox.length - 1].innerHTML = "<p>" + context + "</p>";
         var msgList = getByClass(oUl, "PullToRefresh")[0];
         msgList.scrollTo(0, msgList.scrollHeight);
       }
@@ -216,6 +193,12 @@ function App() {
 
   function onRightContentClick() {
     window.history.go(0);
+  }
+
+  function onInputFocus(e){
+    if (msgRef && msgRef.current) {
+      msgRef.current.scrollToEnd() ;
+    }
   }
 
   function onLeftContentClick() {
@@ -252,11 +235,13 @@ function App() {
           title: 'AIITChat(' + modelname + ')',
         }}
         messages={messages}
+        messagesRef={msgRef}
         renderMessageContent={renderMessageContent}
         quickReplies={defaultQuickReplies}
         onQuickReplyClick={handleQuickReplyClick}
         onSend={handleSend}
         placeholder="请输入您的问题，shift + 回车换行"
+        onInputFocus={onInputFocus}
       />
       <Progress value={percentage} />
     </div>
