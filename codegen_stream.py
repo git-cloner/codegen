@@ -4,8 +4,8 @@ from aiohttp import web
 import json
 from jaxformer.hf.sample import load_model, sampling
 from gpt_j import gpt_load_model, gpt_generate_stream
-from ChatGLM_6b import getAnswerFromChatGLM6b
-from Vicuna_7b import getAnswerFromVicuna7b
+from ChatGLM_6b import getAnswerFromChatGLM6b, getAnswerFromChatGLM6b_v2
+from Vicuna_7b import getAnswerFromVicuna7b, getAnswerFromVicuna7b_v2
 
 filter_string = None
 
@@ -24,7 +24,7 @@ def filter_context(context):
                 text = f.read()
             filter_string = text.split('\n')
         except FileNotFoundError as err:
-           filter_string = []
+            filter_string = []
     for line in filter_string:
         if line in context:
             return True
@@ -76,4 +76,46 @@ async def codegen_stream(request):
             {"result_en": result_en, "result_ch": result_ch,
                 "time": end-start, "stop": stop}
         ),
+    )
+
+
+async def codegen_stream_v2(request):
+    params = await request.json()
+    context = params["context"]
+    modelname = params["modelname"]
+    prompt = context["prompt"]
+    # filter
+    if filter_context(prompt):
+        return web.Response(
+            content_type="application/json",
+            text=json.dumps(
+                {"response": "请更换问题重新输入",
+                 "history": [],
+                 "status": 403,
+                 "time": 0,
+                 "stop": True}
+            ),
+        )
+
+    start = time.perf_counter()
+    print(time.strftime("%Y-%m-%d %H:%M:%S",
+          time.localtime()), "request : " + prompt)
+    stop = False
+    if modelname == 'vicuna-7b':
+        result = getAnswerFromVicuna7b_v2(prompt)
+    else:
+        result = getAnswerFromChatGLM6b_v2(context)
+    stop = result["response"] .endswith("[stop]")
+    if result["response"] == "":
+        result["response"] = "思考中"
+    if stop:
+        result["response"] = result["response"].replace("[stop]", "")
+    end = time.perf_counter()
+    result["time"] = end-start
+    result["stop"] = stop
+    print(time.strftime("%Y-%m-%d %H:%M:%S",
+          time.localtime()), "result  : " + result["response"])
+    return web.Response(
+        content_type="application/json",
+        text=json.dumps(result),
     )

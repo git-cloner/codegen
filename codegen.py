@@ -8,7 +8,7 @@ from functools import lru_cache
 from aiohttp import web
 from jaxformer.hf.sample import load_model,sampling
 from gpt_j import gpt_load_model,gpt_generate
-from codegen_stream import codegen_stream
+from codegen_stream import codegen_stream,codegen_stream_v2
 from ChatGLM_6b import getAnswerFromChatGLM6b
 from Vicuna_7b import getAnswerFromVicuna7b
 
@@ -69,6 +69,7 @@ app.router.add_get("/", index)
 app.router.add_get("/codegen", index)
 app.router.add_post("/codegen", codegen)
 app.router.add_post("/codegen_stream", codegen_stream)
+app.router.add_post("/codegen_stream/v2", codegen_stream_v2)
 
 for route in list(app.router.routes()):
     cors.add(route, {
