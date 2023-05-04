@@ -74,7 +74,7 @@ python codegen.py
 ```
 
 ### test
-post: http://127.0.0.1:5000/codegen or direct post to :https://gitclone.com/aiit/codegen
+post: http://127.0.0.1:5001/codegen or direct post to :https://gitclone.com/aiit/codegen
 
 #### Use Salesforce codegen
 

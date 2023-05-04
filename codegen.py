@@ -47,9 +47,9 @@ async def codegen(request):
     stop = False
     if flag_chs :
         if modelname == 'vicuna-7b':
-            result_en = getAnswerFromVicuna7b(context)
+            result = getAnswerFromVicuna7b(context)
         else:
-            result_en = getAnswerFromChatGLM6b(context)
+            result = getAnswerFromChatGLM6b(context)
         stop = result.endswith("[stop]")
         result = result.replace("[stop]", "")
     else:
@@ -85,5 +85,5 @@ if __name__ == "__main__":
     load_model()
     print("Start web server") 
     web.run_app(
-        app, access_log=None, host="0.0.0.0", port=5000, ssl_context=None
+        app, access_log=None, host="0.0.0.0", port=5001, ssl_context=None
     )
