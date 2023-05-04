@@ -5,7 +5,7 @@ import '@chatui/core/es/styles/index.less';
 import React, { useEffect, useState } from 'react';
 import './chatui-theme.css';
 import { marked } from "marked";
-import packageJson from '../package.json'
+import QRCode from 'react-qr-code'
 
 var modelname = "ChatGLM-6b";
 var lastPrompt = "";
@@ -43,6 +43,7 @@ function App() {
   const { messages, appendMsg, setTyping } = useMessages(initialMessages);
   const [percentage, setPercentage] = useState(0);
   const msgRef = React.useRef(null);
+  const [showQRCode, setShowQRCode] = useState(false)
 
   function handleSend(type, val) {
     if (percentage > 0) {
@@ -144,8 +145,8 @@ function App() {
       onGenCode(prompt, count);
     }
     //只保留5个历史对话
-    if (history.length>5){
-      history.shift() ;
+    if (history.length > 5) {
+      history.shift();
     }
     var context = JSON.stringify({
       "context": {
@@ -195,16 +196,18 @@ function App() {
     window.history.go(0);
   }
 
-  function onInputFocus(e){
+  function onInputFocus(e) {
     if (msgRef && msgRef.current) {
-      msgRef.current.scrollToEnd() ;
+      msgRef.current.scrollToEnd();
     }
   }
 
   function onLeftContentClick() {
-    const name = packageJson.name;
-    const version = packageJson.version;
-    window.alert(name + '\n' + version);
+    openQRCode();
+  }
+
+  function openQRCode() {
+    setShowQRCode(true)
   }
 
   useEffect(() => {
@@ -244,6 +247,16 @@ function App() {
         onInputFocus={onInputFocus}
       />
       <Progress value={percentage} />
+      {showQRCode && (
+        <div className="qr-code-modal">
+          <div className="qr-code-content">
+            <QRCode value="https://gitclone.com/aiit/chat/" />
+            <div style={{ textAlign: 'center', marginTop: '10px' }}>
+              <button onClick={() => setShowQRCode(false)}>关闭</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
