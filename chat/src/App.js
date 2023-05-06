@@ -113,6 +113,7 @@ function App() {
     var result = "";
     await Sleep(500);
     if (count >= x) {
+      updateMsg("请更换问题重新输入");
       setPercentage(0);
       return;
     }
@@ -211,6 +212,9 @@ function App() {
   }
 
   useEffect(() => {
+    if(showQRCode){
+      return ;
+    }
     var oUl = document.getElementById('root');
     var aBox = getByClass(oUl, 'Input Input--outline Composer-input');
     if (aBox.length > 0) {

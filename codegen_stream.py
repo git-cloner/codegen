@@ -21,7 +21,7 @@ def filter_context(context):
         print("loading filter")
         try:
             with open('filter.txt', mode='r', encoding='utf-8') as f:
-                text = f.read()
+                text = f.read().rstrip()
             filter_string = text.split('\n')
         except FileNotFoundError as err:
             filter_string = []
