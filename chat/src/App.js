@@ -137,6 +137,11 @@ function App() {
         });
         setTimeout(() => { updateMsg(result); }, 200);
       } else {
+        if ((count > 20) && (result === "思考中")) {
+          updateMsg("请更换问题或稍候再试！");
+          setPercentage(0);
+          return;
+        }
         updateMsg(result);
       }
       count++;
