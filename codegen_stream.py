@@ -102,7 +102,7 @@ async def codegen_stream_v2(request):
           time.localtime()), "request : " + prompt)
     stop = False
     if modelname == 'vicuna-7b':
-        result = getAnswerFromVicuna7b_v2(prompt)
+        result = getAnswerFromVicuna7b_v2(context)
     else:
         result = getAnswerFromChatGLM6b_v2(context)
     stop = result["response"] .endswith("[stop]")

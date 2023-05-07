@@ -5,7 +5,8 @@ import '@chatui/core/es/styles/index.less';
 import React, { useEffect, useState } from 'react';
 import './chatui-theme.css';
 import { marked } from "marked";
-import QRCode from 'react-qr-code'
+import QRCode from 'react-qr-code';
+import packageJson from '../package.json';
 
 var modelname = "ChatGLM-6b";
 var lastPrompt = "";
@@ -44,6 +45,7 @@ function App() {
   const [percentage, setPercentage] = useState(0);
   const msgRef = React.useRef(null);
   const [showQRCode, setShowQRCode] = useState(false)
+  const [version, setVersion] = useState("");
 
   function handleSend(type, val) {
     if (percentage > 0) {
@@ -119,7 +121,7 @@ function App() {
     }
     let xhr = new XMLHttpRequest();
     xhr.open('post', 'https://gitclone.com/aiit/codegen_stream/v2');
-    //xhr.open('post', 'http://localhost:5000/codegen_stream/v2');
+    //xhr.open('post', 'http://localhost:5001/codegen_stream/v2');
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onload = function () {
       var json = JSON.parse(xhr.response);
@@ -208,17 +210,20 @@ function App() {
   }
 
   function openQRCode() {
-    setShowQRCode(true)
+    setVersion(packageJson.name + ' ' + packageJson.version);
+    setShowQRCode(true);
   }
 
   useEffect(() => {
-    if(showQRCode){
-      return ;
-    }
     var oUl = document.getElementById('root');
     var aBox = getByClass(oUl, 'Input Input--outline Composer-input');
     if (aBox.length > 0) {
-      aBox[0].focus();
+      if (showQRCode) {
+        aBox[0].blur();
+      }
+      else {
+        aBox[0].focus();
+      }
     }
   })
 
@@ -256,6 +261,8 @@ function App() {
           <div className="qr-code-content">
             <QRCode value="https://gitclone.com/aiit/chat/" />
             <div style={{ textAlign: 'center', marginTop: '10px' }}>
+              <div>{version}</div>
+              <p></p>
               <button onClick={() => setShowQRCode(false)}>关闭</button>
             </div>
           </div>
