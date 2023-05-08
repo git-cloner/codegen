@@ -124,7 +124,14 @@ function App() {
     //xhr.open('post', 'http://localhost:5001/codegen_stream/v2');
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onload = function () {
-      var json = JSON.parse(xhr.response);
+      var json ;
+      try {
+        json = JSON.parse(xhr.response);  
+      } catch (error) {
+        updateMsg(error);
+        setPercentage(0);
+        return;
+      }      
       result = json.response;
       stop = json.stop;
       history = json.history;
@@ -137,7 +144,7 @@ function App() {
         });
         setTimeout(() => { updateMsg(result); }, 200);
       } else {
-        if ((count > 20) && (result === "思考中")) {
+        if ( (count > 20) && ((result === "思考中") || (result === ""))) {
           updateMsg("请更换问题或稍候再试！");
           setPercentage(0);
           return;
@@ -266,6 +273,7 @@ function App() {
           <div className="qr-code-content">
             <QRCode value="https://gitclone.com/aiit/chat/" />
             <div style={{ textAlign: 'center', marginTop: '10px' }}>
+            <div>gitclone@126.com</div>
               <div>{version}</div>
               <p></p>
               <button onClick={() => setShowQRCode(false)}>关闭</button>
