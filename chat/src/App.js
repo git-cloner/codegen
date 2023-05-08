@@ -95,8 +95,10 @@ function App() {
     }
     if (item.name.startsWith("ChatGLM")) {
       modelname = "ChatGLM-6b";
+      changeTitleStyle(0);
     } else {
       modelname = "vicuna-7b";
+      changeTitleStyle(1);
     }
     handleSend('text', "你好");
   }
@@ -124,14 +126,14 @@ function App() {
     //xhr.open('post', 'http://localhost:5001/codegen_stream/v2');
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onload = function () {
-      var json ;
+      var json;
       try {
-        json = JSON.parse(xhr.response);  
+        json = JSON.parse(xhr.response);
       } catch (error) {
         updateMsg(error);
         setPercentage(0);
         return;
-      }      
+      }
       result = json.response;
       stop = json.stop;
       history = json.history;
@@ -144,7 +146,7 @@ function App() {
         });
         setTimeout(() => { updateMsg(result); }, 200);
       } else {
-        if ( (count > 20) && ((result === "思考中") || (result === ""))) {
+        if ((count > 20) && ((result === "思考中") || (result === ""))) {
           updateMsg("请更换问题或稍候再试！");
           setPercentage(0);
           return;
@@ -226,6 +228,20 @@ function App() {
     setShowQRCode(true);
   }
 
+  function changeTitleStyle(mode) {
+    var oUl = document.getElementById('root');
+    var aBox = getByClass(oUl, 'Navbar-title');
+    if (aBox.length > 0) {
+      if (mode === 0) {
+        aBox[0].style.color = 'black';
+      }
+      else {
+        aBox[0].style.color = 'blue';
+      }
+    }
+
+  }
+
   useEffect(() => {
     var oUl = document.getElementById('root');
     var aBox = getByClass(oUl, 'Input Input--outline Composer-input');
@@ -245,14 +261,14 @@ function App() {
         navbar={{
           leftContent: {
             icon: 'apps',
-            title: '关于',
+            title: '关于Aiit-Chat',
             onClick: onLeftContentClick,
 
           },
           rightContent: [
             {
-              icon: 'refresh',
-              title: '刷新',
+              icon: 'close-circle',
+              title: '清除历史对话',
               onClick: onRightContentClick,
             },
           ],
@@ -273,7 +289,8 @@ function App() {
           <div className="qr-code-content">
             <QRCode value="https://gitclone.com/aiit/chat/" />
             <div style={{ textAlign: 'center', marginTop: '10px' }}>
-            <div>gitclone@126.com</div>
+              <div>gitclone@126.com</div>
+              <br></br>
               <div>{version}</div>
               <p></p>
               <button onClick={() => setShowQRCode(false)}>关闭</button>
