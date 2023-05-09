@@ -47,7 +47,8 @@ export default React.forwardRef((props, ref) => {
         if (suggest) {
             setText(suggest);
         }
-        send(suggest);
+        //不调用发送，用户可能需要修改选择的内容
+        //send(suggest);
     }, [setText, send]);
 
     const handleSend = useCallback(() => {
