@@ -7,6 +7,7 @@ import './chatui-theme.css';
 import { marked } from "marked";
 import QRCode from 'react-qr-code';
 import packageJson from '../package.json';
+import MComposer from './MComposer';
 
 var modelname = "ChatGLM-6b";
 var lastPrompt = "";
@@ -35,7 +36,7 @@ const defaultQuickReplies = [
 const initialMessages = [
   {
     type: 'text',
-    content: { text: '您好，请入编程、科学、技术、历史、文化、生活、趣味等领域的问题' },
+    content: { text: '您好，请输入编程、科学、技术、历史、文化、生活、趣味等领域的问题' },
     user: { avatar: '//gitclone.com/download1/gitclone.png' },
   }
 ];
@@ -46,6 +47,8 @@ function App() {
   const msgRef = React.useRef(null);
   const [showQRCode, setShowQRCode] = useState(false)
   const [version, setVersion] = useState("");
+
+  const inputRef = React.useRef(null);
 
   function handleSend(type, val) {
     if (percentage > 0) {
@@ -254,7 +257,6 @@ function App() {
       }
     }
   })
-
   return (
     <div style={{ height: 'calc(100vh - 2px)', marginTop: '-5px' }}>
       <Chat
@@ -281,7 +283,9 @@ function App() {
         onQuickReplyClick={handleQuickReplyClick}
         onSend={handleSend}
         placeholder="请输入您的问题，shift + 回车换行"
+        composerRef={inputRef}
         onInputFocus={onInputFocus}
+        Composer={MComposer}
       />
       <Progress value={percentage} />
       {showQRCode && (
