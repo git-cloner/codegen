@@ -5,7 +5,7 @@ export default React.forwardRef((props, ref) => {
     const {onChange, onSend} = props;
     const [text, setText] = useState("");
     const [suggest, setSuggest] = useState([]);
-    const [suggestShow, setSuggestShow] = useState(false);
+    const [isSuggestShow, setSuggestShow] = useState(false);
     const [position, setPosition] = useState({left: "20px", bottom: "60px"}); //left, bottom
     const autoCompletionRef = React.useRef(null);
 
@@ -13,7 +13,7 @@ export default React.forwardRef((props, ref) => {
         setText,
     }));
 
-    const showSuggest = useCallback((suggests) => {
+    const showSuggestItems = useCallback((suggests) => {
         if (suggests.length > 0) {
             setSuggest(suggests);
             setSuggestShow(true);
@@ -32,8 +32,8 @@ export default React.forwardRef((props, ref) => {
         if (val.length > 0) {
             suggests = ["aaaaa", "bbbbbb", "cccccc", "ddddddd", "eeeeeee"];
         }
-        showSuggest(suggests);
-    }, [showSuggest, onChange]);
+        showSuggestItems(suggests);
+    }, [showSuggestItems, onChange]);
 
     const send = useCallback((content) => {
         if (content) {
@@ -49,6 +49,7 @@ export default React.forwardRef((props, ref) => {
         }
         //不调用发送，用户可能需要修改选择的内容
         //send(suggest);
+        setSuggestShow(false);
     }, [setText, send]);
 
     const handleSend = useCallback(() => {
@@ -56,7 +57,11 @@ export default React.forwardRef((props, ref) => {
     }, [send, text]);
 
     const handleKeydown = useCallback((e) => {
-        let ret = autoCompletionRef.current.onKeyEvent(e);
+        let ret = false;
+        if(isSuggestShow) {
+            //只有在打开自动完成的时候交给自动完成接管事件
+            ret = autoCompletionRef.current.onKeyEvent(e);
+        }
         if (!ret) {
             if (!e.shiftKey && e.keyCode === 13) {
                 send(text);
@@ -74,7 +79,7 @@ export default React.forwardRef((props, ref) => {
     return <>
         <AutoCompletion
             ref={autoCompletionRef}
-            show={suggestShow}
+            show={isSuggestShow}
             items={suggest}
             position={position}
             onChoose={handleChoose}/>
