@@ -49,10 +49,11 @@ export default React.forwardRef((props, ref) => {
         setText(val);
         onChange && onChange(val);
 
-        //自动完成
         let suggests = [];
         if (val.length > 0) {
-            suggests = await getPrompts(val);
+            if (val.endsWith(".") || (val.endsWith("。"))) {
+                suggests = await getPrompts(val.slice(0, -1));
+            }
         }
         showSuggestItems(suggests);
     }, [showSuggestItems, onChange]);

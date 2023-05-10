@@ -36,7 +36,7 @@ const defaultQuickReplies = [
 const initialMessages = [
   {
     type: 'text',
-    content: { text: '您好，请输入编程、科学、技术、历史、文化、生活、趣味等领域的问题' },
+    content: { text: '您好，请输入编程、科学、技术、历史、文化、生活、趣味等领域的问题\n★ 按 “.” 或 “。” （点或全角点）进行问题提示 ★' },
     user: { avatar: '//gitclone.com/download1/gitclone.png' },
   }
 ];
