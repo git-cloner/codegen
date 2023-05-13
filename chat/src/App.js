@@ -1,5 +1,5 @@
 import './App.css';
-import Chat, { Bubble, useMessages, Progress } from '@chatui/core';
+import Chat, { Bubble, useMessages, Progress, Modal } from '@chatui/core';
 import '@chatui/core/dist/index.css';
 import '@chatui/core/es/styles/index.less';
 import React, { useEffect, useState } from 'react';
@@ -28,7 +28,11 @@ const defaultQuickReplies = [
   },
   {
     icon: 'chevron-up',
-    name: '复制上个问题',
+    name: '上一条',
+  },
+  {
+    icon: 'keyboard-circle',
+    name: '历史'
   }
 ];
 
@@ -47,6 +51,7 @@ function App() {
   const msgRef = React.useRef(null);
   const [showQRCode, setShowQRCode] = useState(false)
   const [version, setVersion] = useState("");
+  const [showHistory, setShowHistory] = useState(false)
 
   const inputRef = React.useRef(null);
 
@@ -64,7 +69,9 @@ function App() {
       });
       setTyping(true);
       setPercentage(10);
-      lastPrompt = val;
+      if (val !== "你好") {
+        lastPrompt = val;
+      }
       onGenCode(val, 0);
     }
   }
@@ -86,14 +93,22 @@ function App() {
     }
   }
 
+  function setDefaultInput(val) {
+    var oUl = document.getElementById('root');
+    var aBox = getByClass(oUl, 'Input Input--outline Composer-input');
+    if (aBox.length > 0) {
+      aBox[0].value = val;
+      aBox[0].focus();
+    }
+  }
+
   function handleQuickReplyClick(item) {
-    if (item.name.startsWith("复制")) {
-      var oUl = document.getElementById('root');
-      var aBox = getByClass(oUl, 'Input Input--outline Composer-input');
-      if (aBox.length > 0) {
-        aBox[0].value = lastPrompt;
-        aBox[0].focus();
-      }
+    if (item.name.startsWith("上一条")) {
+      setDefaultInput(lastPrompt);
+      return;
+    }
+    if (item.name.startsWith("历史")) {
+      setShowHistory(true);
       return;
     }
     if (item.name.startsWith("ChatGLM")) {
@@ -103,6 +118,7 @@ function App() {
       modelname = "vicuna-7b";
       changeTitleStyle(1);
     }
+    history = [];
     handleSend('text', "你好");
   }
 
@@ -213,7 +229,7 @@ function App() {
   }
 
   function onRightContentClick() {
-    window.history.go(0);
+    window.open('https://github.com/git-cloner/codegen/stargazers', '_blank');
   }
 
   function onInputFocus(e) {
@@ -242,7 +258,20 @@ function App() {
         aBox[0].style.color = 'blue';
       }
     }
+  }
 
+  function handleHistoryClose() {
+    setShowHistory(false);
+  }
+
+  function handleHistoryClear() {
+    history = [];
+    setShowHistory(false);
+  }
+
+  function handleHistoryClick(item) {
+    setShowHistory(false);
+    setTimeout(() => { setDefaultInput(item); }, 200);
   }
 
   useEffect(() => {
@@ -257,6 +286,7 @@ function App() {
       }
     }
   })
+
   return (
     <div style={{ height: 'calc(100vh - 2px)', marginTop: '-5px' }}>
       <Chat
@@ -269,8 +299,8 @@ function App() {
           },
           rightContent: [
             {
-              icon: 'close-circle',
-              title: '清除历史对话',
+              icon: 'thumbs-up',
+              title: '点赞',
               onClick: onRightContentClick,
             },
           ],
@@ -302,6 +332,37 @@ function App() {
           </div>
         </div>
       )}
+      {
+
+        <div>
+          <Modal
+            active={showHistory}
+            title="历史"
+            showClose={false}
+            onClose={handleHistoryClose}
+            actions={[
+              {
+                label: '清除',
+                color: 'primary',
+                onClick: handleHistoryClear,
+              },
+              {
+                label: '取消',
+                onClick: handleHistoryClose,
+              },
+            ]}
+            history={history}
+          >
+            <div style={{ overflow: 'hidden' }}>
+              {
+                history.map((item, index) => <div key={item[0]} style={{ paddingLeft: '15px', paddingBottom: '15px' }}
+                  onClick={() => handleHistoryClick(item[0])}>{index + 1}. {item[0]}</div>)
+              }
+            </div>
+          </Modal>
+        </div>
+
+      }
     </div>
   );
 }
