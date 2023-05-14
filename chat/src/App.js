@@ -10,7 +10,6 @@ import packageJson from '../package.json';
 import MComposer from './MComposer';
 
 var modelname = "ChatGLM-6b";
-var lastPrompt = "";
 var history = []
 
 const defaultQuickReplies = [
@@ -25,10 +24,6 @@ const defaultQuickReplies = [
     name: 'Vicuna',
     isNew: true,
     isHighlight: true,
-  },
-  {
-    icon: 'chevron-up',
-    name: '上一条',
   },
   {
     icon: 'keyboard-circle',
@@ -69,9 +64,6 @@ function App() {
       });
       setTyping(true);
       setPercentage(10);
-      if (val !== "你好") {
-        lastPrompt = val;
-      }
       onGenCode(val, 0);
     }
   }
@@ -97,16 +89,14 @@ function App() {
     var oUl = document.getElementById('root');
     var aBox = getByClass(oUl, 'Input Input--outline Composer-input');
     if (aBox.length > 0) {
-      aBox[0].value = val;
+      if (inputRef && inputRef.current){
+        inputRef.current.setText(val) ;
+      }
       aBox[0].focus();
     }
   }
 
   function handleQuickReplyClick(item) {
-    if (item.name.startsWith("上一条")) {
-      setDefaultInput(lastPrompt);
-      return;
-    }
     if (item.name.startsWith("历史")) {
       setShowHistory(true);
       return;
