@@ -108,7 +108,6 @@ function App() {
       modelname = "vicuna-7b";
       changeTitleStyle(1);
     }
-    history = [];
     handleSend('text', "你好");
   }
 

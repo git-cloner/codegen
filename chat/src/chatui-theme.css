@@ -40,3 +40,14 @@
   overflow-y: hidden;
   padding-bottom: 1.125rem;
 }
+
+.Bubble.text, .Bubble.typing {
+    word-wrap: break-word;
+    box-sizing: border-box;
+    min-width: 2.5rem;
+    overflow-wrap: break-word;
+    padding: .75rem;
+    -webkit-user-select: text;
+    user-select: text;
+    white-space: normal;
+}
