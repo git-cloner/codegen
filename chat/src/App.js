@@ -121,11 +121,10 @@ function App() {
 
   async function onGenCode(prompt, count) {
     var stop = false;
-    var x = 120;
+    var x = 240 ;
     var result = "";
     await Sleep(500);
     if (count >= x) {
-      updateMsg("请更换问题重新输入");
       setPercentage(0);
       return;
     }
