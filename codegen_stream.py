@@ -110,6 +110,8 @@ async def codegen_stream_v2(request):
         result["response"] = "思考中"
     if stop:
         result["response"] = result["response"].replace("[stop]", "")
+        if "以如下题目写一篇文章" in prompt :
+            result["response"] = result["response"] + "[gitclone.com为您服务]"
     end = time.perf_counter()
     result["time"] = end-start
     result["stop"] = stop
