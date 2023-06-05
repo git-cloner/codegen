@@ -15,14 +15,14 @@ var history = []
 const defaultQuickReplies = [
   {
     icon: 'message',
-    name: 'ChatGLM',
-    isNew: true,
+    name: 'ChatGLM模型',
+    isNew: false,
     isHighlight: true,
   },
   {
     icon: 'file',
-    name: 'Vicuna',
-    isNew: true,
+    name: 'Vicuna模型',
+    isNew: false,
     isHighlight: true,
   },
   {
@@ -217,7 +217,7 @@ function App() {
   }
 
   function onRightContentClick() {
-    window.open('https://github.com/git-cloner/codegen/stargazers', '_blank');
+    window.open('https://github.com/git-cloner/codegen', '_blank');
   }
 
   function onInputFocus(e) {
@@ -287,8 +287,8 @@ function App() {
           },
           rightContent: [
             {
-              icon: 'thumbs-up',
-              title: '点赞',
+              icon: 'home',
+              title: '源码',
               onClick: onRightContentClick,
             },
           ],
