@@ -51,3 +51,9 @@
     user-select: text;
     white-space: normal;
 }
+
+.Message.right .Bubble {
+  background: #95ec69;
+  border-radius: 12px;
+  margin-left: 2.5rem;
+}

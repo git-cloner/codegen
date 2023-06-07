@@ -59,7 +59,7 @@ function App() {
       appendMsg({
         type: 'text',
         content: { text: val },
-        position: 'left',
+        position: 'right',
         user: { avatar: '//gitclone.com/download1/user.png' },
       });
       setTyping(true);
@@ -149,7 +149,7 @@ function App() {
         appendMsg({
           type: 'text',
           content: { text: "" },
-          user: { avatar: '//gitclone.com/download1/gitclone.png' },
+          user: { avatar: '//gitclone.com/download1/aiit/' + modelname + '.gif' },
         });
         setTimeout(() => { updateMsg(result); }, 200);
       } else {
@@ -287,8 +287,8 @@ function App() {
           },
           rightContent: [
             {
-              icon: 'home',
               title: '源码',
+              img:'//gitclone.com/download1/aiit/github.png',
               onClick: onRightContentClick,
             },
           ],
