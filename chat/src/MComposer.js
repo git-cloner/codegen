@@ -110,7 +110,7 @@ export default React.forwardRef((props, ref) => {
             <div className="Composer-inputWrap">
                 <div className="">
                     <textarea className="Input Input--outline Composer-input"
-                        placeholder="请输入您的问题，shift + 回车换行" rows="1"
+                        placeholder="shift + 回车换行，.或。提示" rows="1"
                         onKeyDown={handleKeydown}
                         enterKeyHint="send" value={text} onChange={handleChange}></textarea></div>
             </div>
