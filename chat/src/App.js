@@ -15,7 +15,7 @@ var history = []
 const defaultQuickReplies = [
   {
     icon: 'message',
-    name: 'ChatGLM模型',
+    name: 'ChatGLM2模型',
     isNew: false,
     isHighlight: true,
   },
