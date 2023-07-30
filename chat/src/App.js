@@ -26,6 +26,12 @@ const defaultQuickReplies = [
     isHighlight: true,
   },
   {
+    icon: 'copy',
+    name: 'Llama2中文',
+    isNew: false,
+    isHighlight: true,
+  },
+  {
     icon: 'keyboard-circle',
     name: '历史'
   }
@@ -104,7 +110,12 @@ function App() {
     if (item.name.startsWith("ChatGLM")) {
       modelname = "ChatGLM-6b";
       changeTitleStyle(0);
-    } else {
+    }
+    else if (item.name.startsWith("Llama2")) {
+      modelname = "Llama-7b";
+      changeTitleStyle(2);
+    }
+    else {
       modelname = "vicuna-7b";
       changeTitleStyle(1);
     }
@@ -242,8 +253,11 @@ function App() {
       if (mode === 0) {
         aBox[0].style.color = 'black';
       }
-      else {
+      else if (mode ===1){
         aBox[0].style.color = 'blue';
+      }
+      else{
+        aBox[0].style.color = 'green';
       }
     }
   }
