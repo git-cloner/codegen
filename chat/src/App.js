@@ -41,7 +41,7 @@ const defaultQuickReplies = [
 const initialMessages = [
   {
     type: 'text',
-    content: { text: 'github镜像加速，请访问 https://gitclone.com' },
+    content: { text: 'github镜像加速，请访问 https://gitclone.com ，huggingface镜像，请访问 https://aliendao.cn' },
     user: { avatar: '//gitclone.com/download1/gitclone.png' },
   }
 ];
@@ -95,8 +95,8 @@ function App() {
     var oUl = document.getElementById('root');
     var aBox = getByClass(oUl, 'Input Input--outline Composer-input');
     if (aBox.length > 0) {
-      if (inputRef && inputRef.current){
-        inputRef.current.setText(val) ;
+      if (inputRef && inputRef.current) {
+        inputRef.current.setText(val);
       }
       aBox[0].focus();
     }
@@ -132,7 +132,7 @@ function App() {
 
   async function onGenCode(prompt, count) {
     var stop = false;
-    var x = 240 ;
+    var x = 240;
     var result = "";
     await Sleep(500);
     if (count >= x) {
@@ -253,10 +253,10 @@ function App() {
       if (mode === 0) {
         aBox[0].style.color = 'black';
       }
-      else if (mode ===1){
+      else if (mode === 1) {
         aBox[0].style.color = 'blue';
       }
-      else{
+      else {
         aBox[0].style.color = 'green';
       }
     }
@@ -302,7 +302,7 @@ function App() {
           rightContent: [
             {
               title: '源码',
-              img:'//gitclone.com/download1/aiit/github.png',
+              img: '//gitclone.com/download1/aiit/github.png',
               onClick: onRightContentClick,
             },
           ],
