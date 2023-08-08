@@ -15,13 +15,19 @@ var history = []
 const defaultQuickReplies = [
   {
     icon: 'message',
-    name: 'ChatGLM2模型',
+    name: 'ChatGLM2',
     isNew: false,
     isHighlight: true,
   },
   {
     icon: 'file',
-    name: 'Vicuna模型',
+    name: '通义千问',
+    isNew: true,
+    isHighlight: true,
+  },
+  {
+    icon: 'file',
+    name: 'Vicuna',
     isNew: false,
     isHighlight: true,
   },
@@ -110,6 +116,10 @@ function App() {
     if (item.name.startsWith("ChatGLM")) {
       modelname = "ChatGLM-6b";
       changeTitleStyle(0);
+    }
+    else if (item.name.startsWith("通义千问")) {
+      modelname = "Qwen-7b";
+      changeTitleStyle(2);
     }
     else if (item.name.startsWith("Llama2")) {
       modelname = "Llama-7b";

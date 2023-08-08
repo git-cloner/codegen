@@ -7,6 +7,7 @@ from gpt_j import gpt_load_model, gpt_generate_stream
 from ChatGLM_6b import getAnswerFromChatGLM6b, getAnswerFromChatGLM6b_v2
 from Vicuna_7b import getAnswerFromVicuna7b, getAnswerFromVicuna7b_v2
 from LlaMA2_7b import getAnswerFromLLaMA_v2
+from Qwen_7b import getAnswerFromQwen7b_v2
 
 filter_string = None
 
@@ -106,6 +107,8 @@ async def codegen_stream_v2(request):
         result = getAnswerFromVicuna7b_v2(context)
     elif modelname == 'Llama-7b':
         result = getAnswerFromLLaMA_v2(context)
+    elif modelname == 'Qwen-7b':
+        result = getAnswerFromQwen7b_v2(context)
     else:
         result = getAnswerFromChatGLM6b_v2(context)
     stop = result["response"] .endswith("[stop]")
