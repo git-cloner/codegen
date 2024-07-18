@@ -15,26 +15,20 @@ var history = []
 const defaultQuickReplies = [
   {
     icon: 'message',
-    name: 'ChatGLM2',
+    name: 'ChatGLM3',
     isNew: false,
     isHighlight: true,
   },
   {
     icon: 'file',
     name: '通义千问',
+    isNew: false,
+    isHighlight: true,
+  },
+  {
+    icon: 'play-circle',
+    name: 'AI小镇',
     isNew: true,
-    isHighlight: true,
-  },
-  {
-    icon: 'file',
-    name: 'Vicuna',
-    isNew: false,
-    isHighlight: true,
-  },
-  {
-    icon: 'copy',
-    name: 'Llama2中文',
-    isNew: false,
     isHighlight: true,
   },
   {
@@ -125,6 +119,10 @@ function App() {
       modelname = "Llama-7b";
       changeTitleStyle(2);
     }
+    else if (item.name.startsWith("AI小镇")) {
+      window.open('https://gitclone.com/ai-town/', '_blank');
+      return ;
+    }
     else {
       modelname = "vicuna-7b";
       changeTitleStyle(1);
@@ -137,6 +135,11 @@ function App() {
   }
 
   function markdown(code) {
+    if (modelname === "Agent-6b"){
+      code = code.replace("@agent Coder", "\n### @agent Coder\n");
+      code = code.replace("@agent Product_manager", "\n### @agent Product_manager\n");
+      code = code.replace("@agent User_proxy", "\n### @agent User_proxy\n");
+    }
     return marked(code);
   }
 
@@ -144,7 +147,13 @@ function App() {
     var stop = false;
     var x = 240;
     var result = "";
-    await Sleep(500);
+    if (modelname === "Agent-6b"){
+      x  = 600 ;
+      await Sleep(1000);
+    } 
+    else{
+      await Sleep(500);
+    }    
     if (count >= x) {
       setPercentage(0);
       return;
@@ -174,7 +183,7 @@ function App() {
         });
         setTimeout(() => { updateMsg(result); }, 200);
       } else {
-        if ((count > 20) && ((result === "思考中") || (result === ""))) {
+        if ((modelname !== "Agent-6b") && (count > 20) && ((result === "思考中") || (result === ""))) {
           updateMsg("请更换问题或稍候再试！");
           setPercentage(0);
           return;

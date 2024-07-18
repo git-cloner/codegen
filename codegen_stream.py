@@ -8,6 +8,7 @@ from ChatGLM_6b import getAnswerFromChatGLM6b, getAnswerFromChatGLM6b_v2
 from Vicuna_7b import getAnswerFromVicuna7b, getAnswerFromVicuna7b_v2
 from LlaMA2_7b import getAnswerFromLLaMA_v2
 from Qwen_7b import getAnswerFromQwen7b_v2
+from Agent_6b import getAnswerFromAgent6b_v2
 
 filter_string = None
 
@@ -109,6 +110,8 @@ async def codegen_stream_v2(request):
         result = getAnswerFromLLaMA_v2(context)
     elif modelname == 'Qwen-7b':
         result = getAnswerFromQwen7b_v2(context)
+    elif modelname == 'Agent-6b':
+        result = getAnswerFromAgent6b_v2(context)
     else:
         result = getAnswerFromChatGLM6b_v2(context)
     stop = result["response"] .endswith("[stop]")
