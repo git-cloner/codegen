@@ -14,6 +14,12 @@ var history = []
 
 const defaultQuickReplies = [
   {
+    icon: 'copy',
+    name: '新版(更多的模型)',
+    isNew: true,
+    isHighlight: true,
+  },
+  {
     icon: 'message',
     name: 'ChatGLM',
     isNew: false,
@@ -28,13 +34,19 @@ const defaultQuickReplies = [
   {
     icon: 'play-circle',
     name: 'AI小镇',
+    isNew: false,
+    isHighlight: true,
+  },
+  {
+    icon: 'check',
+    name: 'AI生成全套程序',
     isNew: true,
     isHighlight: true,
   },
   {
     icon: 'keyboard-circle',
     name: '历史'
-  }
+  },
 ];
 
 
@@ -121,6 +133,14 @@ function App() {
     }
     else if (item.name.startsWith("AI小镇")) {
       window.open('https://gitclone.com/ai-town/', '_blank');
+      return ;
+    }
+    else if (item.name.startsWith("新版(更多的模型)")) {
+      window.open('https://gitclone.com/aiit/chat1/', '_blank');
+      return ;
+    }
+    else if (item.name.startsWith("AI生成全套程序")) {
+      window.open('https://code.gitclone.com', '_blank');
       return ;
     }
     else {
